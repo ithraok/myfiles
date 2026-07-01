@@ -1,0 +1,22 @@
+---
+layout: null
+---
+[
+{% assign first = true -%}
+{% assign docs = site.static_files | sort: "path" -%}
+{% for file in docs -%}
+  {% if file.path contains "/documents/" -%}
+    {% assign relpath = file.path | remove_first: "/documents/" -%}
+    {% assign parts = relpath | split: "/" -%}
+    {% assign filename = parts | last -%}
+    {% unless filename == "index.json" or filename == "local-index.json" -%}
+      {% unless first %},{% endunless %}
+  {
+    "name": {{ filename | jsonify }},
+    "path": {{ relpath | jsonify }}
+  }
+      {% assign first = false -%}
+    {% endunless -%}
+  {% endif -%}
+{% endfor -%}
+]
