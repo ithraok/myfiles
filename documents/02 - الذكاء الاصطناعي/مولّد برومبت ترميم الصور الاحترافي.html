@@ -1,0 +1,1255 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>مولد برومبت ترميم الصور الاحترافي | إعداد عبدالله بن رشيد الدريبي</title>
+  <meta name="description" content="مولد احترافي عربي لإنشاء برومبتات ترميم الصور، تنظيفها، تلوينها، ورفع جودتها مع الحفاظ على الهوية والملامح الأصلية." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@500;600;700&family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      /* ===== استوديو ترميم أرشيفي — وضع فاتح (ورق دافئ + نحاس + أزرق بترولي) ===== */
+      --bg:#f3ece0;
+      --bg-2:#efe6d6;
+      --card:#fffdf8;
+      --card2:#f7f0e3;
+      --ink:#241d14;
+      --text:#2a2114;
+      --muted:#7a6c57;
+      --line:#e3d7c2;
+      --line-soft:#ece2d1;
+
+      --primary:#155e63;        /* أزرق بترولي = الوضوح والإحياء */
+      --primary2:#1f8a86;
+      --primary-soft:#e3f1ef;
+      --copper:#b5762a;         /* نحاسي = الطابع الأرشيفي */
+      --copper2:#dca353;
+      --copper-soft:#f6ead4;
+      --gold:#c8941a;
+      --danger:#a23121;
+      --danger-soft:#f8e7e2;
+      --success:#0f6b46;
+      --success-soft:#e4f3ea;
+
+      --shadow:0 24px 60px -28px rgba(36,29,20,.45);
+      --shadow-soft:0 10px 28px -16px rgba(36,29,20,.35);
+      --radius:22px;
+      --radius-sm:15px;
+
+      --display:"El Messiri", system-ui, sans-serif;
+      --body:"Almarai", system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+    }
+    [data-theme="dark"]{
+      /* ===== غرفة تحميض داكنة دافئة ===== */
+      --bg:#161210;
+      --bg-2:#1c1714;
+      --card:#221c16;
+      --card2:#2a2219;
+      --ink:#f3ece0;
+      --text:#efe6d6;
+      --muted:#b3a48d;
+      --line:#3a2f24;
+      --line-soft:#332a20;
+
+      --primary:#3fc7bf;
+      --primary2:#67dad2;
+      --primary-soft:#0f2e2c;
+      --copper:#e0a665;
+      --copper2:#f0c089;
+      --copper-soft:#3a2c18;
+      --gold:#f0c14b;
+      --danger:#f0a08f;
+      --danger-soft:#3a1c16;
+      --success:#7fd6a6;
+      --success-soft:#12301f;
+
+      --shadow:0 24px 60px -26px rgba(0,0,0,.7);
+      --shadow-soft:0 12px 30px -18px rgba(0,0,0,.6);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:var(--body);
+      color:var(--text);
+      line-height:1.85;
+      background:
+        radial-gradient(900px 520px at 88% -8%, color-mix(in srgb, var(--copper) 16%, transparent), transparent 60%),
+        radial-gradient(820px 520px at 6% 108%, color-mix(in srgb, var(--primary) 14%, transparent), transparent 58%),
+        var(--bg);
+      position:relative;
+    }
+    /* نسيج ورقي خفيف يعطي طابعًا أرشيفيًا */
+    body::before{
+      content:"";
+      position:fixed; inset:0; pointer-events:none; z-index:0;
+      opacity:.5;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.045'/%3E%3C/svg%3E");
+    }
+    .app{position:relative; z-index:1; width:min(1440px, 94vw); margin:0 auto; padding:30px 0 52px}
+
+    button, input, textarea, select{font-family:inherit}
+    a{color:inherit}
+
+    /* ===== الواجهة الترويسية ===== */
+    .hero{
+      display:grid;
+      grid-template-columns:1.18fr .82fr;
+      gap:22px;
+      align-items:stretch;
+      margin-bottom:22px;
+    }
+    .hero-card,
+    .panel,
+    .output-panel,
+    .stats-card{
+      background:
+        linear-gradient(180deg, color-mix(in srgb, var(--card) 78%, transparent), var(--card));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .hero-card{padding:30px; position:relative; overflow:hidden}
+    .hero-card::after{
+      content:"";
+      position:absolute; inset:auto -90px -90px auto;
+      width:240px; height:240px; border-radius:999px;
+      background:radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--copper) 40%, transparent), transparent 70%);
+      filter:blur(6px);
+    }
+    .kicker{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:14px}
+    .badge{
+      display:inline-flex; align-items:center; gap:6px;
+      border:1px solid color-mix(in srgb, var(--primary) 30%, var(--line));
+      background:var(--primary-soft);
+      color:var(--primary);
+      padding:6px 12px;
+      border-radius:999px;
+      font-size:12.5px;
+      font-weight:800;
+    }
+    .badge.copper{
+      border-color:color-mix(in srgb, var(--copper) 34%, var(--line));
+      background:var(--copper-soft);
+      color:var(--copper);
+    }
+    h1{
+      font-family:var(--display);
+      font-size:clamp(30px, 4.2vw, 50px);
+      line-height:1.2; margin:0 0 14px; letter-spacing:-.5px;
+      font-weight:700;
+    }
+    h1 .accent{
+      background:linear-gradient(120deg, var(--copper), var(--primary));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+    .lead{font-size:16.5px; color:var(--muted); margin:0; max-width:860px}
+    .hero-actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:24px}
+
+    .btn{
+      border:1px solid var(--line);
+      background:var(--card2);
+      color:var(--text);
+      border-radius:14px;
+      padding:11px 16px;
+      cursor:pointer;
+      font-weight:800;
+      font-size:14.5px;
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      min-height:44px;
+      transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease, background .16s ease;
+      user-select:none;
+    }
+    .btn:hover{transform:translateY(-2px); border-color:color-mix(in srgb, var(--primary) 40%, var(--line)); box-shadow:var(--shadow-soft)}
+    .btn:active{transform:translateY(0)}
+    .btn:focus-visible{outline:3px solid color-mix(in srgb, var(--primary) 45%, transparent); outline-offset:2px}
+    .btn.primary{background:linear-gradient(135deg, var(--primary), var(--primary2)); color:#fff; border-color:transparent}
+    .btn.copper{background:linear-gradient(135deg, var(--copper), var(--copper2)); color:#231600; border-color:transparent}
+    .btn.danger{background:var(--danger-soft); color:var(--danger); border-color:color-mix(in srgb, var(--danger) 26%, var(--line))}
+    .btn.ghost{background:transparent}
+
+    .stats-card{padding:24px; display:grid; gap:12px; align-content:start}
+    .stat{
+      background:var(--card2);
+      border:1px solid var(--line);
+      border-radius:var(--radius-sm);
+      padding:14px 16px;
+      display:flex; justify-content:space-between; gap:12px; align-items:center;
+    }
+    .stat span{color:var(--muted); font-weight:700; font-size:14px}
+    .stat strong{font-family:var(--display); font-size:21px; color:var(--copper); font-weight:700}
+    .stat strong.teal{color:var(--primary)}
+
+    /* ===== التخطيط الرئيسي ===== */
+    .layout{display:grid; grid-template-columns:minmax(0, 1fr) 440px; gap:22px; align-items:start}
+    .panel{padding:18px}
+
+    /* شريط التقدم بين الأقسام */
+    .progress-wrap{display:flex; align-items:center; gap:10px; padding:2px 6px 14px}
+    .progress-track{flex:1; height:7px; background:var(--line); border-radius:999px; overflow:hidden}
+    .progress-fill{height:100%; width:0%; border-radius:999px; background:linear-gradient(90deg, var(--copper), var(--primary)); transition:width .3s ease}
+    .progress-label{font-size:13px; font-weight:800; color:var(--muted); white-space:nowrap}
+
+    .tabs{
+      display:flex; gap:8px; overflow:auto;
+      padding:8px 4px 14px;
+      scrollbar-width:thin;
+      position:sticky; top:0; z-index:20;
+      background:linear-gradient(180deg, var(--card), color-mix(in srgb, var(--card) 80%, transparent));
+      backdrop-filter:blur(10px);
+      border-radius:18px 18px 0 0;
+    }
+    .tab{
+      white-space:nowrap;
+      border:1px solid var(--line);
+      background:var(--card2);
+      color:var(--muted);
+      padding:9px 14px;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:800;
+      font-size:14px;
+      transition:.16s ease;
+    }
+    .tab:hover{border-color:color-mix(in srgb, var(--primary) 36%, var(--line)); color:var(--text)}
+    .tab.active{background:linear-gradient(135deg, var(--primary), var(--primary2)); color:#fff; border-color:transparent}
+    .tab:focus-visible{outline:3px solid color-mix(in srgb, var(--primary) 45%, transparent); outline-offset:2px}
+
+    .section{display:none; animation:fade .2s ease both; padding:12px 4px 4px}
+    .section.active{display:block}
+    @keyframes fade{from{opacity:0; transform:translateY(6px)}to{opacity:1; transform:none}}
+    .section-head{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin:6px 0 18px}
+    .section-head h2{font-family:var(--display); margin:0; font-size:25px; font-weight:700}
+    .section-head p{margin:5px 0 0; color:var(--muted)}
+
+    .grid{display:grid; gap:13px}
+    .grid.two{grid-template-columns:repeat(2, minmax(0,1fr))}
+    .field{
+      background:var(--card2);
+      border:1px solid var(--line);
+      border-radius:var(--radius-sm);
+      padding:15px;
+    }
+    .field label.title{display:block; font-weight:800; margin-bottom:9px; font-size:15px}
+    .hint{font-size:13px; color:var(--muted); margin-top:6px}
+
+    select, input[type="text"], textarea{
+      width:100%;
+      border:1px solid var(--line);
+      background:var(--card);
+      color:var(--text);
+      border-radius:13px;
+      padding:11px 13px;
+      outline:none;
+      font-size:15px;
+      transition:.15s ease;
+    }
+    textarea{resize:vertical; min-height:92px; line-height:1.9}
+    select:focus, input:focus, textarea:focus{border-color:var(--primary); box-shadow:0 0 0 3px color-mix(in srgb, var(--primary) 16%, transparent)}
+
+    .checks{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px}
+    .check{
+      display:flex; align-items:flex-start; gap:9px;
+      border:1px solid var(--line);
+      background:var(--card);
+      border-radius:13px;
+      padding:11px;
+      cursor:pointer;
+      min-height:48px;
+      transition:.15s ease;
+    }
+    .check:hover{border-color:color-mix(in srgb, var(--primary) 40%, var(--line)); background:color-mix(in srgb, var(--primary-soft) 45%, var(--card))}
+    .check input{margin-top:4px; accent-color:var(--primary); transform:scale(1.1); cursor:pointer}
+    .check:has(input:checked){border-color:var(--primary); background:color-mix(in srgb, var(--primary-soft) 65%, var(--card))}
+    .check span{font-weight:700; font-size:14px}
+
+    .range-row{display:grid; grid-template-columns:1fr auto; gap:12px; align-items:center}
+    input[type="range"]{width:100%; accent-color:var(--copper); cursor:pointer}
+    .range-value{min-width:96px; text-align:center; font-weight:800; color:var(--copper); background:var(--copper-soft); border:1px solid color-mix(in srgb, var(--copper) 24%, var(--line)); border-radius:999px; padding:7px 11px}
+
+    .presets{display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:13px}
+    .preset{
+      text-align:right;
+      background:linear-gradient(180deg, var(--card), var(--card2));
+      border:1px solid var(--line);
+      border-radius:var(--radius-sm);
+      padding:16px;
+      cursor:pointer;
+      transition:.18s ease;
+      min-height:120px;
+    }
+    .preset:hover{transform:translateY(-3px); border-color:var(--copper); box-shadow:var(--shadow-soft)}
+    .preset:focus-visible{outline:3px solid color-mix(in srgb, var(--copper) 50%, transparent); outline-offset:2px}
+    .preset b{display:block; font-family:var(--display); font-size:16.5px; margin-bottom:6px; font-weight:600}
+    .preset small{display:block; color:var(--muted); line-height:1.7}
+
+    /* ===== لوحة المخرجات ===== */
+    .output-panel{position:sticky; top:18px; overflow:hidden}
+    .output-head{
+      padding:20px 20px 14px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(135deg, color-mix(in srgb, var(--copper-soft) 70%, var(--card)), var(--card));
+    }
+    .output-head h2{font-family:var(--display); margin:0; font-size:22px; font-weight:700}
+    .output-head p{margin:5px 0 0; color:var(--muted); font-size:13px}
+    .output-body{padding:18px}
+    .output-tools{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px; margin-bottom:13px}
+    #promptOutput{
+      min-height:392px; max-height:56vh;
+      background:var(--card2);
+      border-radius:var(--radius-sm);
+      border:1px solid var(--line);
+      padding:16px;
+      overflow:auto;
+      white-space:pre-wrap;
+      font-size:14.5px;
+      line-height:2;
+    }
+    #promptOutput:focus-visible{outline:3px solid color-mix(in srgb, var(--primary) 40%, transparent); outline-offset:2px}
+    #promptOutput.stale{opacity:.55}
+    .meta{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-top:13px}
+    .meta div{background:var(--card2); border:1px solid var(--line); border-radius:13px; padding:9px; text-align:center}
+    .meta b{display:block; font-family:var(--display); color:var(--primary); font-size:18px; font-weight:700}
+    .meta span{font-size:12px; color:var(--muted); font-weight:800}
+
+    .accordion{border:1px solid var(--line); border-radius:var(--radius-sm); overflow:hidden; background:var(--card2); margin-top:13px}
+    .accordion summary{cursor:pointer; padding:14px 16px; font-weight:800; list-style:none; display:flex; align-items:center; gap:8px}
+    .accordion summary::-webkit-details-marker{display:none}
+    .accordion summary::after{content:"⌄"; margin-inline-start:auto; transition:.2s; font-size:18px; color:var(--copper)}
+    .accordion[open] summary::after{transform:rotate(180deg)}
+    .accordion-body{padding:0 16px 16px; color:var(--muted)}
+
+    .note{
+      border:1px dashed color-mix(in srgb, var(--copper) 50%, var(--line));
+      background:var(--copper-soft);
+      color:color-mix(in srgb, var(--text) 78%, var(--copper));
+      border-radius:var(--radius-sm);
+      padding:13px 15px;
+      margin:14px 0;
+      font-weight:700;
+      font-size:14px;
+    }
+    .note.teal{
+      border-color:color-mix(in srgb, var(--primary) 50%, var(--line));
+      background:var(--primary-soft);
+      color:color-mix(in srgb, var(--text) 78%, var(--primary));
+    }
+    .mini-actions{display:flex; gap:8px; flex-wrap:wrap; margin-top:14px}
+
+    .quality-chip{
+      display:flex; gap:9px; align-items:flex-start;
+      border:1px solid var(--line);
+      border-radius:13px; padding:12px;
+      background:var(--card);
+      cursor:pointer; font-weight:700; font-size:14.5px;
+    }
+    .quality-chip input{accent-color:var(--primary); transform:scale(1.15); margin-top:3px}
+
+    .footer{margin-top:26px; text-align:center; color:var(--muted); font-size:14px; line-height:2}
+    .footer .brand{font-family:var(--display); color:var(--text); font-weight:700; font-size:16px}
+    .footer .verse{color:var(--copper); font-weight:700; margin-top:4px}
+
+    /* ===== Toast ===== */
+    .toast{
+      position:fixed; left:24px; bottom:24px;
+      background:var(--ink); color:var(--bg);
+      padding:13px 18px; border-radius:14px;
+      box-shadow:var(--shadow);
+      opacity:0; transform:translateY(12px); pointer-events:none;
+      transition:.24s ease; z-index:1000; font-weight:800;
+    }
+    .toast.show{opacity:1; transform:none}
+
+    /* ===== نافذة التأكيد المخصصة ===== */
+    .modal-overlay{
+      position:fixed; inset:0; z-index:1200;
+      background:color-mix(in srgb, var(--ink) 55%, transparent);
+      backdrop-filter:blur(4px);
+      display:none; align-items:center; justify-content:center; padding:20px;
+    }
+    .modal-overlay.show{display:flex; animation:fade .18s ease both}
+    .modal{
+      background:var(--card); border:1px solid var(--line);
+      border-radius:var(--radius); box-shadow:var(--shadow);
+      max-width:420px; width:100%; padding:24px; text-align:center;
+    }
+    .modal h3{font-family:var(--display); margin:0 0 8px; font-size:22px}
+    .modal p{margin:0 0 20px; color:var(--muted)}
+    .modal-actions{display:flex; gap:10px; justify-content:center}
+
+    @media (max-width:1100px){
+      .hero, .layout{grid-template-columns:1fr}
+      .output-panel{position:relative; top:0}
+      #promptOutput{max-height:none}
+    }
+    @media (max-width:760px){
+      .app{width:min(96vw, 760px); padding-top:16px}
+      .hero-card{padding:22px}
+      .grid.two,.checks,.presets{grid-template-columns:1fr}
+      .output-tools{grid-template-columns:1fr}
+      .meta{grid-template-columns:1fr}
+      .section-head{display:block}
+    }
+    @media print{
+      body{background:#fff; color:#000}
+      body::before{display:none}
+      .hero, .panel, .output-head, .output-tools, .meta, .footer, .toast, .accordion{display:none!important}
+      .layout{display:block}
+      .output-panel{box-shadow:none; border:0; position:static}
+      #promptOutput{border:0; max-height:none; color:#000; background:#fff; font-size:13pt}
+    }
+    @media (prefers-reduced-motion:reduce){
+      *{animation:none!important; transition:none!important}
+    }
+  </style>
+</head>
+<body>
+  <div class="app" id="appRoot">
+    <header class="hero">
+      <div class="hero-card">
+        <div class="kicker">
+          <span class="badge copper">🖼️ أداة احترافية</span>
+          <span class="badge">ترميم • تنظيف • تلوين • رفع جودة</span>
+        </div>
+        <h1>مولّد برومبت <span class="accent">ترميم الصور</span> الاحترافي</h1>
+        <p class="lead">أنشئ برومبتًا دقيقًا وقويًا لترميم الصور الضعيفة، إزالة الكتابات والخربشات والتشوهات، توضيح الملامح، تلوين الصور القديمة بألوان واقعية، مع الحفاظ الكامل على الهوية الأصلية.</p>
+        <div class="hero-actions">
+          <button class="btn primary" onclick="generatePrompt(true)">⚡ توليد البرومبت الآن</button>
+          <button class="btn copper" onclick="copyPrompt()">📋 نسخ البرومبت</button>
+          <button class="btn ghost" onclick="toggleTheme()">🌓 تبديل المظهر</button>
+          <button class="btn ghost" onclick="scrollToOutput()">⬇️ الانتقال للمخرجات</button>
+        </div>
+      </div>
+      <aside class="stats-card">
+        <div class="stat"><span>حفظ الهوية</span><strong>إجباري</strong></div>
+        <div class="stat"><span>القوالب الجاهزة</span><strong class="teal" id="presetCount">٠</strong></div>
+        <div class="stat"><span>خيارات المعالجة</span><strong>+٨٠</strong></div>
+        <div class="stat"><span>لغات الإخراج</span><strong class="teal">AR / EN</strong></div>
+      </aside>
+    </header>
+
+    <main class="layout">
+      <section class="panel">
+        <nav class="tabs" role="tablist" aria-label="أقسام المولد">
+          <button class="tab active" role="tab" aria-selected="true" data-tab="presets">⭐ القوالب</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="basic">١) بيانات الصورة</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="damage">٢) نوع الضرر</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="repair">٣) المعالجة</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="face">٤) الملامح</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="color">٥) الألوان</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="identity">٦) الحفظ والمنع</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="output">٧) الإخراج</button>
+        </nav>
+
+        <div class="progress-wrap">
+          <span class="progress-label" id="progressLabel">القسم ١ من ٨</span>
+          <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        </div>
+
+        <section class="section active" id="presets" role="tabpanel">
+          <div class="section-head">
+            <div>
+              <h2>قوالب جاهزة ذكية</h2>
+              <p>اختر قالبًا مناسبًا، وسيضبط لك المولد أهم الخيارات تلقائيًا.</p>
+            </div>
+          </div>
+          <div class="presets" id="presetGrid"></div>
+          <div class="note">💡 يمكنك اختيار قالب جاهز ثم تعديل أي خيار يدويًا قبل توليد البرومبت النهائي.</div>
+        </section>
+
+        <section class="section" id="basic" role="tabpanel">
+          <div class="section-head">
+            <div>
+              <h2>بيانات الصورة</h2>
+              <p>هذه البيانات تجعل البرومبت أكثر دقة وتناسبًا مع نوع الصورة.</p>
+            </div>
+          </div>
+          <div class="grid two">
+            <div class="field">
+              <label class="title" for="photoType">نوع الصورة</label>
+              <select id="photoType">
+                <option value="صورة شخصية">صورة شخصية</option>
+                <option value="صورة طفل">صورة طفل</option>
+                <option value="صورة عائلية">صورة عائلية</option>
+                <option value="صورة جماعية">صورة جماعية</option>
+                <option value="صورة قديمة جدًا">صورة قديمة جدًا</option>
+                <option value="صورة أبيض وأسود">صورة أبيض وأسود</option>
+                <option value="صورة من فيديو أو شاشة">صورة من فيديو أو شاشة</option>
+                <option value="صورة ممسوحة ضوئيًا">صورة ممسوحة ضوئيًا</option>
+                <option value="صورة وثائقية أو أرشيفية">صورة وثائقية أو أرشيفية</option>
+                <option value="صورة هاتف قديمة">صورة هاتف قديمة</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="title" for="peopleCount">عدد الأشخاص</label>
+              <select id="peopleCount">
+                <option value="شخص واحد">شخص واحد</option>
+                <option value="شخصان">شخصان</option>
+                <option value="عدة أشخاص">عدة أشخاص</option>
+                <option value="غير محدد">غير محدد</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="title" for="focusArea">منطقة التركيز</label>
+              <select id="focusArea">
+                <option value="الوجه والملامح">الوجه والملامح</option>
+                <option value="الوجه والصدر">الوجه والصدر</option>
+                <option value="الجسم كاملًا">الجسم كاملًا</option>
+                <option value="المشهد كاملًا">المشهد كاملًا</option>
+                <option value="الخلفية والعناصر المحيطة">الخلفية والعناصر المحيطة</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="title" for="backgroundImportance">أهمية الخلفية</label>
+              <select id="backgroundImportance">
+                <option value="الحفاظ عليها قدر الإمكان">الحفاظ عليها قدر الإمكان</option>
+                <option value="تنظيفها فقط دون تغيير جوهري">تنظيفها فقط دون تغيير جوهري</option>
+                <option value="تحسينها بشكل طبيعي">تحسينها بشكل طبيعي</option>
+                <option value="ليست مهمة ويمكن تنظيفها بعمق">ليست مهمة ويمكن تنظيفها بعمق</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="title" for="restorationLevel">مستوى الترميم</label>
+              <select id="restorationLevel">
+                <option value="متوازن">متوازن</option>
+                <option value="خفيف">خفيف</option>
+                <option value="قوي">قوي</option>
+                <option value="عميق جدًا">عميق جدًا</option>
+                <option value="أرشيفي احترافي">أرشيفي احترافي</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="title" for="sharpnessLevel">مستوى وضوح الملامح</label>
+              <select id="sharpnessLevel">
+                <option value="طبيعي ومتوازن">طبيعي ومتوازن</option>
+                <option value="واضح">واضح</option>
+                <option value="واضح جدًا">واضح جدًا</option>
+                <option value="دقيق للغاية دون مبالغة">دقيق للغاية دون مبالغة</option>
+              </select>
+            </div>
+          </div>
+          <div class="field" style="margin-top:13px">
+            <label class="title" for="customNotes">وصف إضافي اختياري للصورة أو المطلوب</label>
+            <textarea id="customNotes" placeholder="مثال: الصورة لطفل، توجد كتابة في أعلى الصورة، الوجه غير واضح، أريد تلوينًا طبيعيًا دون تغيير الملامح..."></textarea>
+          </div>
+        </section>
+
+        <section class="section" id="damage" role="tabpanel">
+          <div class="section-head">
+            <div>
+              <h2>نوع الضرر والتشوهات</h2>
+              <p>حدد كل ما يظهر في الصورة ليُضاف إلى البرومبت بدقة.</p>
+            </div>
+          </div>
+          <div class="grid two">
+            <div class="field">
+              <label class="title">أضرار الجودة والوضوح</label>
+              <div class="checks" data-group="damageQuality"></div>
+            </div>
+            <div class="field">
+              <label class="title">أضرار قديمة ومادية</label>
+              <div class="checks" data-group="damagePhysical"></div>
+            </div>
+            <div class="field">
+              <label class="title">كتابات وعناصر مشوهة</label>
+              <div class="checks" data-group="damageText"></div>
+            </div>
+            <div class="field">
+              <label class="title">مشكلات الإضاءة والألوان</label>
+              <div class="checks" data-group="damageLight"></div>
+            </div>
+          </div>
+          <div class="field" style="margin-top:13px">
+            <label class="title" for="damageSeverity">شدة الضرر العامة</label>
+            <div class="range-row">
+              <input type="range" id="damageSeverity" min="1" max="5" value="3" />
+              <span class="range-value" id="damageSeverityText">متوسط</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="repair" role="tabpanel">
+          <div class="section-head">
+            <div>
+              <h2>المعالجات المطلوبة</h2>
+              <p>اختر نوع الإصلاح والتحسين الذي تريده في الصورة.</p>
+            </div>
+          </div>
+          <div class="grid two">
+            <div class="field">
+              <label class="title">تنظيف وإزالة عيوب</label>
+              <div class="checks" data-group="repairClean"></div>
+            </div>
+            <div class="field">
+              <label class="title">إعادة بناء وتحسين تفاصيل</label>
+              <div class="checks" data-group="repairRebuild"></div>
+            </div>
+            <div class="field">
+              <label class="title">تحسين فني وإخراجي</label>
+              <div class="checks" data-group="repairEnhance"></div>
+            </div>
+            <div class="field">
+              <label class="title">إخراج نهائي</label>
+              <div class="checks" data-group="repairOutput"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="face" role="tabpanel">
+          <div class="section-head">
+            <div>
+              <h2>تفاصيل الوجه والملامح</h2>
+              <p>هذه الخيارات مهمة جدًا عند ترميم الصور الشخصية وصور الأطفال.</p>
+            </div>
+          </div>
+          <div class="grid two">
+            <div class="field">
+              <label class="title">تفاصيل الوجه</label>
+              <div class="checks" data-group="faceDetails"></div>
+            </div>
+            <div class="field">
+              <label class="title">الطبيعية والواقعية</label>
+              <div class="checks" data-group="faceNatural"></div>
+            </div>
+          </div>
+          <div class="note teal">⚠️ في صور الأشخاص، الأفضل تفعيل الحفاظ على الهوية ومنع تغيير الملامح حتى لا تبدو الصورة مولّدة أو مختلفة.</div>
+        </section>
+
+        <section class="section" id="color" role="tabpanel">
+          <div class="section-head">
+            <div>
+              <h2>الألوان والتلوين الواقعي</h2>
+              <p>حدد هل تريد تصحيح الألوان فقط، أم تلوين صورة قديمة أو أبيض وأسود.</p>
+            </div>
+          </div>
+          <div class="grid two">
+            <div class="field">
+              <label class="title" for="colorMode">حالة الألوان في الصورة</label>
+              <select id="colorMode">
+                <option value="الصورة ملونة وتحتاج تصحيحًا طبيعيًا">الصورة ملونة وتحتاج تصحيحًا طبيعيًا</option>
+                <option value="الصورة باهتة وتحتاج إحياء الألوان">الصورة باهتة وتحتاج إحياء الألوان</option>
+                <option value="الصورة أبيض وأسود وتحتاج تلوينًا واقعيًا كاملًا">الصورة أبيض وأسود وتحتاج تلوينًا واقعيًا كاملًا</option>
+                <option value="الصورة قديمة وتحتاج ألوانًا تاريخية واقعية">الصورة قديمة وتحتاج ألوانًا تاريخية واقعية</option>
+                <option value="لا أريد تلوينًا، فقط تنظيف ووضوح">لا أريد تلوينًا، فقط تنظيف ووضوح</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="title" for="colorStyle">نمط الألوان المطلوب</label>
+              <select id="colorStyle">
+                <option value="ألوان طبيعية واقعية">ألوان طبيعية واقعية</option>
+                <option value="ألوان محايدة ومتوازنة">ألوان محايدة ومتوازنة</option>
+                <option value="ألوان دافئة طبيعية">ألوان دافئة طبيعية</option>
+                <option value="ألوان هادئة غير مشبعة">ألوان هادئة غير مشبعة</option>
+                <option value="ألوان فوتوغرافية حديثة">ألوان فوتوغرافية حديثة</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid two" style="margin-top:13px">
+            <div class="field">
+              <label class="title">تحسينات الألوان</label>
+              <div class="checks" data-group="colorOptions"></div>
+            </div>
+            <div class="field">
+              <label class="title">ضوابط التلوين</label>
+              <div class="checks" data-group="colorGuards"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="identity" role="tabpanel">
+          <div class="section-head">
+            <div>
+              <h2>الحفاظ الإجباري والمنع</h2>
+              <p>الجزء الأهم لضبط البرومبت ومنع تغيير هوية الشخص.</p>
+            </div>
+          </div>
+          <div class="grid two">
+            <div class="field">
+              <label class="title">يجب الحفاظ على</label>
+              <div class="checks" data-group="preserve"></div>
+            </div>
+            <div class="field">
+              <label class="title">تجنّب تمامًا</label>
+              <div class="checks" data-group="avoid"></div>
+            </div>
+          </div>
+          <div class="field" style="margin-top:13px">
+            <label class="quality-chip"><input type="checkbox" id="priorityIdentity" checked /> <span>إضافة جملة الأولوية القصوى للحفاظ على الهوية والملامح الأصلية</span></label>
+          </div>
+        </section>
+
+        <section class="section" id="output" role="tabpanel">
+          <div class="section-head">
+            <div>
+              <h2>إعدادات الإخراج</h2>
+              <p>حدد طول البرومبت ولغته وطبيعة الصياغة النهائية.</p>
+            </div>
+          </div>
+          <div class="grid two">
+            <div class="field">
+              <label class="title" for="promptLength">طول البرومبت</label>
+              <select id="promptLength">
+                <option value="balanced">متوازن احترافي</option>
+                <option value="short">مختصر قوي</option>
+                <option value="long">مطول شامل</option>
+                <option value="ultra">فائق التفصيل والقوة</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="title" for="promptLang">لغة البرومبت</label>
+              <select id="promptLang">
+                <option value="ar">عربي</option>
+                <option value="en">إنجليزي</option>
+                <option value="both">عربي + إنجليزي</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="title" for="toneMode">أسلوب الصياغة</label>
+              <select id="toneMode">
+                <option value="professional">احترافي مباشر</option>
+                <option value="strict">صارم ودقيق</option>
+                <option value="natural">طبيعي وهادئ</option>
+                <option value="studio">فوتوغرافي استوديو</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="title" for="finalLook">المظهر النهائي</label>
+              <select id="finalLook">
+                <option value="صورة فوتوغرافية حديثة وواضحة">صورة فوتوغرافية حديثة وواضحة</option>
+                <option value="ترميم أرشيفي طبيعي يحافظ على زمن الصورة">ترميم أرشيفي طبيعي يحافظ على زمن الصورة</option>
+                <option value="صورة بورتريه نظيفة وواقعية">صورة بورتريه نظيفة وواقعية</option>
+                <option value="صورة ناعمة الإضاءة وحادة الملامح طبيعيًا">صورة ناعمة الإضاءة وحادة الملامح طبيعيًا</option>
+              </select>
+            </div>
+          </div>
+          <div class="mini-actions">
+            <button class="btn primary" onclick="generatePrompt(true)">⚡ توليد الآن</button>
+            <button class="btn copper" onclick="copyPrompt()">📋 نسخ</button>
+            <button class="btn ghost" onclick="downloadTxt()">⬇️ تحميل TXT</button>
+            <button class="btn ghost" onclick="exportSettings()">💾 تصدير الإعدادات</button>
+            <label class="btn ghost" for="importFile">📥 استيراد إعدادات</label>
+            <input type="file" id="importFile" accept="application/json" hidden />
+            <button class="btn danger" onclick="resetAll()">🧹 إعادة ضبط</button>
+          </div>
+        </section>
+      </section>
+
+      <aside class="output-panel" id="outputBox">
+        <div class="output-head">
+          <h2>البرومبت النهائي</h2>
+          <p>يُحدّث تلقائيًا بعد اختيار الخيارات. انسخه وأرفقه مع الصورة في أداة توليد/تحرير الصور.</p>
+        </div>
+        <div class="output-body">
+          <div class="output-tools">
+            <button class="btn primary" onclick="generatePrompt(true)">⚡ تحديث</button>
+            <button class="btn copper" onclick="copyPrompt()">📋 نسخ</button>
+            <button class="btn ghost" onclick="copyShortVersion()">✂️ نسخة مختصرة</button>
+            <button class="btn ghost" onclick="downloadTxt()">⬇️ TXT</button>
+            <button class="btn ghost" onclick="window.print()">🖨️ طباعة</button>
+            <button class="btn danger" onclick="clearOutput()">🗑️ مسح المخرج</button>
+          </div>
+          <div id="promptOutput" tabindex="0" aria-live="polite"></div>
+          <div class="meta">
+            <div><b id="wordCount">٠</b><span>كلمة</span></div>
+            <div><b id="charCount">٠</b><span>حرف</span></div>
+            <div><b id="selectedCount">٠</b><span>خيار مفعل</span></div>
+          </div>
+          <details class="accordion">
+            <summary>💡 نصائح الاستخدام</summary>
+            <div class="accordion-body">
+              <p>للصور الشخصية أو صور الأطفال: فعّل دائمًا الحفاظ على الهوية، ومنع تغيير العمر والتعبير. للصور القديمة جدًا: اختر الترميم العميق أو الأرشيفي، وفعّل التلوين الواقعي إذا كانت الصورة بلا ألوان. للصور المأخوذة من فيديو: فعّل إزالة آثار الفيديو وخطوط الشاشة والضغط الرقمي.</p>
+            </div>
+          </details>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="footer">
+      <div class="brand">إعداد وبرمجة: عبدالله بن رشيد الدريبي</div>
+      <div>محتوى تقني وتعليمي | مبادرات وتجارب رقمية</div>
+      <div class="verse">﴿ رَبِّ إِنِّي لِمَا أَنْزَلْتَ إِلَيَّ مِنْ خَيْرٍ فَقِيرٌ ﴾</div>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast">تم</div>
+
+  <!-- نافذة التأكيد المخصصة -->
+  <div class="modal-overlay" id="confirmOverlay" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <div class="modal">
+      <h3 id="confirmTitle">تأكيد</h3>
+      <p id="confirmMsg">هل أنت متأكد؟</p>
+      <div class="modal-actions">
+        <button class="btn ghost" id="confirmCancel">إلغاء</button>
+        <button class="btn danger" id="confirmOk">نعم، متابعة</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    "use strict";
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+    const groups = {
+      damageQuality:[
+        ['noise','تشويش رقمي'], ['blur','ضبابية'], ['grain','تحبّب واضح'], ['pixel','بكسلة'], ['compression','ضغط صورة'], ['lowres','ضعف دقة'], ['soft','ضعف حدة'], ['motion','اهتزاز أو حركة'], ['screenlines','خطوط شاشة'], ['moire','تموجات أو مواريه'], ['video','آثار فيديو'], ['scan','آثار مسح ضوئي']
+      ],
+      damagePhysical:[
+        ['scratches','خدوش'], ['stains','بقع'], ['dust','غبار واتساخ'], ['tears','تمزقات'], ['folds','ثنيات وتجاعيد'], ['edgewear','تآكل الأطراف'], ['missing','أجزاء مفقودة'], ['faded','بهتان قديم'], ['yellow','اصفرار الورق'], ['burn','حروق ضوئية'], ['water','آثار رطوبة'], ['backgrounddamage','تلف الخلفية']
+      ],
+      damageText:[
+        ['writing','كتابات على الصورة'], ['date','تاريخ أو أرقام'], ['logos','شعارات أو علامات'], ['stamps','أختام'], ['scribbles','خربشات بالقلم'], ['stickers','ملصقات أو رموز'], ['ui','أشرطة تشغيل أو واجهة'], ['watermark','علامة مائية مشوهة']
+      ],
+      damageLight:[
+        ['badlight','إضاءة ضعيفة'], ['overexposed','إضاءة زائدة'], ['shadows','ظلال مزعجة'], ['colorcast','انحراف لوني'], ['lowcontrast','تباين منخفض'], ['washed','ألوان باهتة'], ['reds','احمرار أو اصفرار زائد'], ['uneven','إضاءة غير متوازنة']
+      ],
+      repairClean:[
+        ['denoise','إزالة التشويش'], ['deblur','إزالة الضبابية'], ['depixel','تقليل البكسلة'], ['removeCompression','إزالة ضغط الصورة'], ['removeScratches','إزالة الخدوش'], ['removeStains','إزالة البقع'], ['removeTears','إصلاح التمزقات'], ['removeText','إزالة الكتابات والخربشات'], ['removeUi','إزالة عناصر الواجهة والتاريخ والرموز'], ['cleanBg','تنظيف الخلفية']
+      ],
+      repairRebuild:[
+        ['rebuildFace','إعادة بناء تفاصيل الوجه'], ['rebuildMissing','استرجاع التفاصيل المفقودة'], ['restoreEdges','إصلاح الحواف'], ['restoreTexture','استعادة الملمس الطبيعي'], ['improveClothes','تحسين تفاصيل الملابس'], ['improveHair','تحسين تفاصيل الشعر'], ['recoverEyes','استعادة وضوح العينين'], ['recoverSkin','استعادة تفاصيل البشرة الطبيعية']
+      ],
+      repairEnhance:[
+        ['lighting','تحسين الإضاءة'], ['contrast','تحسين التباين'], ['whiteBalance','تصحيح توازن الأبيض'], ['naturalSharp','حدة طبيعية'], ['upscale','رفع الدقة'], ['depth','إبراز العمق الطبيعي'], ['softLight','إضاءة ناعمة'], ['photoReal','واقعية فوتوغرافية']
+      ],
+      repairOutput:[
+        ['cleanFinal','إخراج نظيف جدًا'], ['modernCamera','كأنها ملتقطة بكاميرا حديثة'], ['noAiLook','بدون مظهر ذكاء اصطناعي'], ['highDetail','تفاصيل عالية'], ['balancedFinal','نتيجة متوازنة وطبيعية'], ['printReady','صالحة للطباعة أو الأرشفة']
+      ],
+      faceDetails:[
+        ['eyes','توضيح العينين والحدقات'], ['eyebrows','تحسين الحاجبين'], ['nose','توضيح الأنف'], ['mouth','توضيح الفم والشفاه'], ['faceContour','توضيح حدود الوجه'], ['skin','تحسين البشرة'], ['hair','تحسين الشعر'], ['ears','تحسين الأذن'], ['teeth','تحسين الأسنان إن ظهرت'], ['lashes','تحسين الرموش إن ظهرت']
+      ],
+      faceNatural:[
+        ['skinPores','الحفاظ على مسام وتفاصيل البشرة'], ['noPlastic','منع البشرة البلاستيكية'], ['softSkin','تنعيم لطيف فقط'], ['naturalEyes','لمعان عيون طبيعي'], ['sameExpression','الحفاظ على التعبير'], ['sameGaze','الحفاظ على اتجاه النظرة'], ['sameAge','الحفاظ على العمر الظاهر'], ['babySoft','لطف خاص لملامح الأطفال']
+      ],
+      colorOptions:[
+        ['correctColors','تصحيح الألوان'], ['restoreColors','إحياء الألوان الباهتة'], ['realColorization','تلوين واقعي كامل'], ['skinTone','موازنة لون البشرة'], ['clothesColor','تحسين ألوان الملابس'], ['backgroundColor','تحسين ألوان الخلفية'], ['removeYellow','إزالة الاصفرار'], ['colorHarmony','تناغم لوني طبيعي']
+      ],
+      colorGuards:[
+        ['noOversat','عدم زيادة التشبع'], ['noFakeColor','منع الألوان المصطنعة'], ['realSkin','لون بشرة واقعي'], ['historical','ألوان مناسبة لزمن الصورة'], ['neutralWhite','أبيض وأسود متوازن عند عدم التلوين'], ['colorRespect','عدم تغيير الألوان الحقيقية إن كانت واضحة']
+      ],
+      preserve:[
+        ['identity','الهوية الأصلية'], ['samePerson','نفس الشخص تمامًا'], ['age','العمر الظاهر'], ['expression','التعبير والانطباع'], ['faceShape','شكل الوجه'], ['features','الملامح الأساسية'], ['gaze','اتجاه النظرة'], ['pose','الوضعية والزاوية'], ['skinColor','لون البشرة الطبيعي'], ['clothes','الملابس الأصلية'], ['background','الخلفية قدر الإمكان'], ['photoFeel','الإحساس العام للصورة']
+      ],
+      avoid:[
+        ['changeIdentity','تغيير الهوية'], ['invent','اختراع ملامح جديدة'], ['beautify','تجميل مبالغ'], ['plastic','تنعيم بلاستيكي'], ['changeAge','تغيير العمر'], ['changeSmile','تغيير الابتسامة'], ['changeEyes','تغيير العينين'], ['changeSkin','تغيير لون البشرة'], ['addObjects','إضافة عناصر جديدة'], ['changeClothes','تغيير الملابس'], ['hardSharp','حدة قاسية'], ['overColor','تلوين مبالغ']
+      ]
+    };
+
+    const presets = [
+      {id:'baby', icon:'👶', title:'صورة طفل منخفضة الجودة', desc:'حفظ الملامح الطفولية وتوضيح الوجه بلطف.', set:{photoType:'صورة طفل', focusArea:'الوجه والملامح', restorationLevel:'قوي', sharpnessLevel:'واضح جدًا', damage:['noise','blur','lowres','soft','compression'], repair:['denoise','deblur','removeCompression','rebuildFace','recoverEyes','recoverSkin','lighting','whiteBalance','naturalSharp','upscale','softLight','photoReal','cleanFinal','noAiLook'], face:['eyes','skin','hair','faceContour','skinPores','noPlastic','softSkin','naturalEyes','sameExpression','sameGaze','sameAge','babySoft'], color:['correctColors','skinTone','colorHarmony','noOversat','noFakeColor','realSkin'], preserveAll:true, avoidAll:true}},
+      {id:'oldbw', icon:'🕰️', title:'صورة قديمة أبيض وأسود', desc:'ترميم أرشيفي مع تلوين واقعي طبيعي.', set:{photoType:'صورة أبيض وأسود', restorationLevel:'أرشيفي احترافي', colorMode:'الصورة أبيض وأسود وتحتاج تلوينًا واقعيًا كاملًا', colorStyle:'ألوان طبيعية واقعية', damage:['scratches','stains','dust','tears','folds','edgewear','missing','faded','yellow'], repair:['removeScratches','removeStains','removeTears','rebuildMissing','restoreEdges','restoreTexture','lighting','contrast','upscale','cleanFinal','printReady'], face:['eyes','faceContour','skin','hair','sameExpression','sameGaze','sameAge','noPlastic'], color:['realColorization','skinTone','clothesColor','backgroundColor','removeYellow','colorHarmony','noOversat','noFakeColor','realSkin','historical'], preserveAll:true, avoidAll:true}},
+      {id:'video', icon:'📼', title:'لقطة من فيديو أو شاشة', desc:'إزالة خطوط الشاشة وآثار الفيديو والواجهة.', set:{photoType:'صورة من فيديو أو شاشة', restorationLevel:'عميق جدًا', damage:['noise','blur','pixel','compression','screenlines','moire','video','ui','date','badlight','colorcast'], repair:['denoise','deblur','depixel','removeCompression','removeUi','rebuildFace','recoverEyes','lighting','whiteBalance','naturalSharp','upscale','photoReal','cleanFinal','modernCamera','noAiLook'], face:['eyes','faceContour','skin','hair','sameExpression','sameGaze','sameAge','noPlastic'], color:['correctColors','restoreColors','skinTone','colorHarmony','noOversat','noFakeColor','realSkin'], preserveAll:true, avoidAll:true}},
+      {id:'text', icon:'✒️', title:'صورة بها كتابات وخربشات', desc:'إزالة الكتابات والرموز مع إعادة بناء المناطق تحتها.', set:{restorationLevel:'قوي', damage:['writing','date','logos','stamps','scribbles','stickers','ui','watermark','stains'], repair:['removeText','removeUi','removeStains','rebuildMissing','restoreTexture','cleanBg','lighting','naturalSharp','upscale','cleanFinal','balancedFinal'], face:['eyes','faceContour','skin','sameExpression','sameGaze','sameAge','noPlastic'], color:['correctColors','skinTone','colorHarmony','noOversat','noFakeColor'], preserveAll:true, avoidAll:true}},
+      {id:'portrait', icon:'🙂', title:'بورتريه وجه وملامح', desc:'إبراز الوجه والعينين دون تغيير الهوية.', set:{photoType:'صورة شخصية', focusArea:'الوجه والملامح', restorationLevel:'متوازن', sharpnessLevel:'دقيق للغاية دون مبالغة', damage:['blur','soft','lowres','noise'], repair:['denoise','deblur','rebuildFace','recoverEyes','recoverSkin','lighting','whiteBalance','naturalSharp','upscale','photoReal','cleanFinal','noAiLook'], face:['eyes','eyebrows','nose','mouth','faceContour','skin','hair','skinPores','noPlastic','softSkin','naturalEyes','sameExpression','sameGaze','sameAge'], color:['correctColors','skinTone','colorHarmony','noOversat','noFakeColor','realSkin'], preserveAll:true, avoidAll:true}},
+      {id:'family', icon:'👨‍👩‍👧‍👦', title:'صورة عائلية أو جماعية', desc:'تحسين عدة أشخاص بتوازن دون تغيير الوجوه.', set:{photoType:'صورة عائلية', peopleCount:'عدة أشخاص', focusArea:'المشهد كاملًا', restorationLevel:'قوي', damage:['noise','blur','grain','lowres','faded','badlight','lowcontrast'], repair:['denoise','deblur','rebuildFace','restoreTexture','improveClothes','lighting','contrast','whiteBalance','upscale','balancedFinal','printReady'], face:['eyes','faceContour','skin','hair','sameExpression','sameGaze','sameAge','noPlastic'], color:['correctColors','restoreColors','skinTone','clothesColor','backgroundColor','colorHarmony','noOversat','noFakeColor','realSkin'], preserveAll:true, avoidAll:true}},
+      {id:'scan', icon:'🖨️', title:'صورة ممسوحة ضوئيًا', desc:'تنظيف آثار المسح والغبار والبقع وتحسين الحواف.', set:{photoType:'صورة ممسوحة ضوئيًا', restorationLevel:'قوي', damage:['scan','noise','dust','stains','scratches','folds','yellow','uneven'], repair:['denoise','removeScratches','removeStains','restoreEdges','restoreTexture','cleanBg','lighting','whiteBalance','contrast','upscale','cleanFinal','printReady'], face:['eyes','faceContour','skin','hair','sameExpression','sameAge','noPlastic'], color:['correctColors','removeYellow','colorHarmony','colorRespect','noOversat'], preserveAll:true, avoidAll:true}},
+      {id:'archival', icon:'🏛️', title:'ترميم أرشيفي عميق', desc:'للصور شديدة التلف مع الحفاظ على زمن الصورة.', set:{photoType:'صورة وثائقية أو أرشيفية', restorationLevel:'أرشيفي احترافي', finalLook:'ترميم أرشيفي طبيعي يحافظ على زمن الصورة', damage:['noise','grain','scratches','stains','tears','folds','edgewear','missing','faded','yellow','backgrounddamage'], repair:['denoise','removeScratches','removeStains','removeTears','rebuildMissing','restoreEdges','restoreTexture','cleanBg','lighting','contrast','upscale','highDetail','printReady'], face:['eyes','faceContour','skin','hair','skinPores','noPlastic','sameExpression','sameGaze','sameAge'], color:['restoreColors','skinTone','removeYellow','colorHarmony','historical','noOversat','noFakeColor','realSkin'], preserveAll:true, avoidAll:true}}
+    ];
+
+    const TAB_IDS = ['presets','basic','damage','repair','face','color','identity','output'];
+    const NO_COLOR_MODE = 'لا أريد تلوينًا، فقط تنظيف ووضوح';
+
+    function arabicNumber(n){return String(n).replace(/\d/g, d=>'٠١٢٣٤٥٦٧٨٩'[+d]);}
+    function toast(msg){const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),1900);}
+
+    /* نافذة تأكيد مخصصة تُرجع Promise */
+    function confirmDialog(message, {title='تأكيد', okText='نعم، متابعة'}={}){
+      return new Promise(resolve=>{
+        const overlay=$('#confirmOverlay');
+        $('#confirmTitle').textContent=title;
+        $('#confirmMsg').textContent=message;
+        $('#confirmOk').textContent=okText;
+        overlay.classList.add('show');
+        const ok=$('#confirmOk'), cancel=$('#confirmCancel');
+        const close=(result)=>{ overlay.classList.remove('show'); ok.onclick=null; cancel.onclick=null; overlay.onclick=null; document.removeEventListener('keydown',onKey); resolve(result); };
+        const onKey=(e)=>{ if(e.key==='Escape') close(false); if(e.key==='Enter') close(true); };
+        ok.onclick=()=>close(true);
+        cancel.onclick=()=>close(false);
+        overlay.onclick=(e)=>{ if(e.target===overlay) close(false); };
+        document.addEventListener('keydown',onKey);
+        ok.focus();
+      });
+    }
+
+    /* debounce بسيط */
+    function debounce(fn, wait=260){
+      let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), wait); };
+    }
+    const debouncedGenerate = debounce(()=>generatePrompt(false), 260);
+
+    function init(){
+      buildChecks(); buildPresets(); bindTabs(); bindAutoGenerate();
+      restoreState(); updateSeverityLabel(); updateProgress('presets'); generatePrompt(false);
+      $('#presetCount').textContent = arabicNumber(presets.length);
+      $('#importFile').addEventListener('change', importSettings);
+      $('#damageSeverity').addEventListener('input',()=>{updateSeverityLabel(); markStale(); debouncedGenerate();});
+    }
+
+    function buildChecks(){
+      Object.entries(groups).forEach(([group, items])=>{
+        const box = $(`[data-group="${group}"]`);
+        if(!box) return;
+        box.innerHTML = items.map(([id,label])=>`<label class="check"><input type="checkbox" data-group="${group}" value="${id}"><span>${label}</span></label>`).join('');
+      });
+      setDefaults();
+    }
+
+    function setDefaults(){
+      ['denoise','deblur','removeCompression','rebuildFace','recoverEyes','lighting','whiteBalance','naturalSharp','upscale','cleanFinal','noAiLook','eyes','skin','faceContour','noPlastic','sameExpression','sameGaze','sameAge','correctColors','skinTone','noOversat','noFakeColor','identity','samePerson','age','expression','faceShape','features','gaze','pose','skinColor','changeIdentity','invent','plastic','changeAge','changeEyes','addObjects','hardSharp'].forEach(v=>checkByValue(v));
+    }
+
+    function checkByValue(value, checked=true){
+      $$(`input[type="checkbox"][value="${value}"]`).forEach(i=>i.checked=checked);
+    }
+
+    function buildPresets(){
+      $('#presetGrid').innerHTML = presets.map(p=>`<button class="preset" type="button" onclick="applyPreset('${p.id}')"><b>${p.icon} ${p.title}</b><small>${p.desc}</small></button>`).join('');
+    }
+
+    function activateTab(tabId){
+      $$('.tab').forEach(b=>{ const on=b.dataset.tab===tabId; b.classList.toggle('active',on); b.setAttribute('aria-selected', on?'true':'false'); });
+      $$('.section').forEach(s=>s.classList.toggle('active', s.id===tabId));
+      updateProgress(tabId);
+    }
+
+    function bindTabs(){
+      const tabs=$$('.tab');
+      tabs.forEach((btn, idx)=>{
+        btn.addEventListener('click',()=>activateTab(btn.dataset.tab));
+        btn.addEventListener('keydown',(e)=>{
+          let target=null;
+          if(e.key==='ArrowLeft') target=tabs[(idx+1)%tabs.length];       /* RTL: يسار = التالي */
+          else if(e.key==='ArrowRight') target=tabs[(idx-1+tabs.length)%tabs.length];
+          else if(e.key==='Home') target=tabs[0];
+          else if(e.key==='End') target=tabs[tabs.length-1];
+          if(target){ e.preventDefault(); target.focus(); activateTab(target.dataset.tab); }
+        });
+      });
+    }
+
+    function updateProgress(tabId){
+      const idx=TAB_IDS.indexOf(tabId);
+      const pos=idx<0?1:idx+1;
+      $('#progressFill').style.width = (pos/TAB_IDS.length*100)+'%';
+      $('#progressLabel').textContent = `القسم ${arabicNumber(pos)} من ${arabicNumber(TAB_IDS.length)}`;
+    }
+
+    function markStale(){ $('#promptOutput').classList.add('stale'); }
+    function clearStale(){ $('#promptOutput').classList.remove('stale'); }
+
+    function bindAutoGenerate(){
+      $$('input[type="checkbox"], select').forEach(el=>el.addEventListener('change',()=>{ markStale(); debouncedGenerate(); }));
+      $$('textarea, input[type="text"]').forEach(el=>el.addEventListener('input',()=>{ markStale(); debouncedGenerate(); }));
+    }
+
+    function updateSeverityLabel(){
+      const map={1:'خفيف',2:'متوسط',3:'متوسط',4:'شديد',5:'شديد جدًا'};
+      $('#damageSeverityText').textContent = map[$('#damageSeverity').value] || 'متوسط';
+    }
+
+    function applyPreset(id){
+      const p = presets.find(x=>x.id===id); if(!p) return;
+      resetChecksOnly();
+      const s = p.set;
+      ['photoType','peopleCount','focusArea','restorationLevel','sharpnessLevel','colorMode','colorStyle','finalLook'].forEach(k=>{ if(s[k]){ const el=$('#'+k); if(el) el.value=s[k]; } });
+      [...(s.damage||[]), ...(s.repair||[]), ...(s.face||[]), ...(s.color||[])].forEach(v=>checkByValue(v,true));
+      if(s.preserveAll) groups.preserve.forEach(([gid])=>checkByValue(gid,true));
+      if(s.avoidAll) groups.avoid.forEach(([gid])=>checkByValue(gid,true));
+      clearStale();
+      generatePrompt(true);
+      toast('تم تطبيق القالب: '+p.title);
+    }
+
+    function resetChecksOnly(){ $$('input[type="checkbox"][data-group]').forEach(i=>i.checked=false); }
+
+    function getSelectedLabels(group){
+      return $$(`input[data-group="${group}"]:checked`).map(i=>{ const f=groups[group].find(x=>x[0]===i.value); return f?f[1]:null; }).filter(Boolean);
+    }
+    function fieldVal(id){ const el=$('#'+id); return el ? el.value : ''; }
+
+    function collect(){
+      const data={
+        photoType:fieldVal('photoType'), peopleCount:fieldVal('peopleCount'), focusArea:fieldVal('focusArea'), backgroundImportance:fieldVal('backgroundImportance'),
+        restorationLevel:fieldVal('restorationLevel'), sharpnessLevel:fieldVal('sharpnessLevel'), customNotes:fieldVal('customNotes').trim(),
+        damageSeverity:$('#damageSeverityText').textContent,
+        colorMode:fieldVal('colorMode'), colorStyle:fieldVal('colorStyle'),
+        promptLength:fieldVal('promptLength'), promptLang:fieldVal('promptLang'), toneMode:fieldVal('toneMode'), finalLook:fieldVal('finalLook'),
+        priorityIdentity:$('#priorityIdentity').checked
+      };
+      data.noColor = (data.colorMode === NO_COLOR_MODE);
+      Object.keys(groups).forEach(g=>data[g]=getSelectedLabels(g));
+      return data;
+    }
+
+    function joinList(arr){ return arr && arr.length ? arr.join('، ') : ''; }
+    function sentence(prefix, arr, suffix='.') { return arr && arr.length ? `${prefix}${joinList(arr)}${suffix}` : ''; }
+
+    /* أسلوب الصياغة (toneMode) — يؤثر فعليًا على المقدمة والتوجيه الختامي */
+    function toneArabic(d){
+      switch(d.toneMode){
+        case 'strict': return {opening:'التزم حرفيًا بالتعليمات التالية دون أي اجتهاد أو تغيير غير مطلوب.', closing:'مهم جدًا: لا تتجاوز حدود الترميم، ولا تُضِف ولا تحذف أي عنصر لم يُطلب صراحةً.'};
+        case 'natural': return {opening:'عالِج الصورة بهدوء وطبيعية تامة كأنها تُرمَّم على يد مختص يحترم روح الصورة.', closing:'اجعل النتيجة طبيعية ومريحة للعين، دون أي أثر صناعي أو مبالغة.'};
+        case 'studio': return {opening:'تعامل مع الصورة كجلسة استوديو فوتوغرافي احترافية: إضاءة متوازنة، عمق طبيعي، ووضوح عدسة عالي الجودة.', closing:'اجعل الإخراج بجودة استوديو فوتوغرافي: نظافة، توازن إضاءة، وحدّة طبيعية احترافية.'};
+        default: return {opening:'', closing:''};
+      }
+    }
+    function toneEnglish(d){
+      switch(d.toneMode){
+        case 'strict': return {opening:'Follow the instructions below literally, without improvising or adding anything not requested.', closing:'Important: stay strictly within restoration limits. Do not add or remove any element that was not explicitly requested.'};
+        case 'natural': return {opening:'Treat the image calmly and naturally, as if restored by a careful specialist who respects the spirit of the photo.', closing:'Keep the result natural and easy on the eye, with no artificial look or exaggeration.'};
+        case 'studio': return {opening:'Treat this as a professional photography studio session: balanced lighting, natural depth, and high-quality lens sharpness.', closing:'Deliver studio-grade output: clean, well-lit, and naturally sharp.'};
+        default: return {opening:'', closing:''};
+      }
+    }
+
+    function buildArabic(d){
+      const levelPhrase = {
+        'خفيف':'قم بترميم خفيف يحافظ على الطابع الأصلي للصورة، مع تحسين النظافة والوضوح دون مبالغة.',
+        'متوازن':'قم بترميم متوازن واحترافي يجمع بين التنظيف، توضيح الملامح، تحسين الألوان، والحفاظ على الواقعية.',
+        'قوي':'قم بترميم قوي يعالج ضعف الصورة بوضوح، ويعيد بناء التفاصيل الضعيفة أو المفقودة بشكل واقعي دون تغيير الهوية.',
+        'عميق جدًا':'قم بترميم عميق جدًا للصورة، مع معالجة التلف الشديد، إعادة بناء التفاصيل، رفع الجودة، وتنظيف كل العيوب الظاهرة بعناية عالية.',
+        'أرشيفي احترافي':'قم بترميم أرشيفي احترافي يحافظ على زمن الصورة وروحها الأصلية، مع إصلاح التلف، تنظيف العيوب، واستعادة التفاصيل والألوان بواقعية.'
+      }[d.restorationLevel] || '';
+
+      const tone = toneArabic(d);
+      const intro = `رمّم هذه ${d.photoType} ترميمًا احترافيًا عالي الجودة، مع الحفاظ الكامل على هوية الشخص أو الأشخاص وملامحهم الأصلية دون تغيير. الصورة تحتوي على ${d.peopleCount}، ومنطقة التركيز الأساسية هي: ${d.focusArea}.`;
+      const basic = `${levelPhrase} اجعل المظهر النهائي: ${d.finalLook}. اجعل مستوى وضوح الملامح ${d.sharpnessLevel}. الخلفية: ${d.backgroundImportance}.`;
+      const damage = [
+        `شدة الضرر العامة: ${d.damageSeverity}.`,
+        sentence('عالِج مشكلات الجودة التالية: ', [...d.damageQuality, ...d.damageLight]),
+        sentence('أصلح العيوب والتلف المادي التالي: ', d.damagePhysical),
+        sentence('أزل العناصر المشوهة التالية إن وجدت: ', d.damageText)
+      ].filter(Boolean).join('\n');
+      const repair = [
+        sentence('نفّذ عمليات التنظيف التالية: ', d.repairClean),
+        sentence('نفّذ عمليات إعادة البناء والتحسين التالية: ', d.repairRebuild),
+        sentence('حسّن الإخراج الفني عبر: ', d.repairEnhance),
+        sentence('اجعل النتيجة النهائية تحقق: ', d.repairOutput)
+      ].filter(Boolean).join('\n');
+      const face = [
+        sentence('وضّح تفاصيل الوجه والملامح التالية بدقة طبيعية: ', d.faceDetails),
+        sentence('راعِ الواقعية والطبيعية من خلال: ', d.faceNatural)
+      ].filter(Boolean).join('\n');
+
+      /* الألوان: منطق سليم عند اختيار "لا تلوين" */
+      let color;
+      if(d.noColor){
+        color = [
+          'لا تقم بأي تلوين أو إعادة تلوين: حافظ على الحالة اللونية الأصلية للصورة (سواء كانت ملونة أو أبيض وأسود) كما هي.',
+          'اقتصر على التنظيف ورفع الوضوح وتحسين التباين والإضاءة فقط دون تغيير طبيعة الألوان.',
+          sentence('التزم بضوابط الألوان التالية: ', d.colorGuards)
+        ].filter(Boolean).join('\n');
+      } else {
+        color = [
+          `حالة الألوان المطلوبة: ${d.colorMode}. نمط الألوان: ${d.colorStyle}.`,
+          sentence('طبّق تحسينات الألوان التالية: ', d.colorOptions),
+          sentence('التزم بضوابط التلوين التالية: ', d.colorGuards)
+        ].filter(Boolean).join('\n');
+      }
+
+      const preserve = sentence('حافظ بدقة على: ', d.preserve);
+      const avoid = sentence('تجنّب تمامًا: ', d.avoid);
+      const custom = d.customNotes ? `ملاحظات إضافية من المستخدم: ${d.customNotes}.` : '';
+      const priority = d.priorityIdentity ? 'الأولوية القصوى: الحفاظ على الهوية والملامح الأصلية أولًا، ثم تحسين الجودة والوضوح والألوان والتنظيف والحدة بشكل طبيعي واحترافي.' : '';
+      const result = 'النتيجة المطلوبة: صورة نظيفة جدًا، واضحة، طبيعية، عالية الدقة، بألوان حقيقية ومتوازنة، وملامح دقيقة وواضحة، خالية من الكتابات والخربشات والتشوهات، وكأنها التُقطت أو رُممت باحترافية عالية دون أن تبدو مصطنعة أو مولدة.';
+
+      if(d.promptLength==='short'){
+        const colorShort = d.noColor
+          ? 'لا تلوين: حافظ على الحالة اللونية الأصلية مع التنظيف ورفع الوضوح فقط.'
+          : `صحّح الألوان بحيث تكون ${d.colorStyle}، مع مراعاة: ${d.colorMode}.`;
+        const parts = [tone.opening, intro, levelPhrase, sentence('أزل أو عالج: ', [...d.damageQuality,...d.damagePhysical,...d.damageText,...d.damageLight]), sentence('نفّذ: ', [...d.repairClean,...d.repairRebuild,...d.repairEnhance]), sentence('وضّح الملامح التالية: ', d.faceDetails), colorShort, preserve, avoid, priority, result, tone.closing].filter(Boolean);
+        return parts.join('\n\n');
+      }
+
+      let parts = [tone.opening, intro, basic, damage, repair, face, color, preserve, avoid, custom, result, priority, tone.closing].filter(Boolean);
+
+      if(d.promptLength==='long'){
+        parts.splice(parts.indexOf(result), 0,
+          'ركّز على اتساق النتيجة: حافظ على وحدة الإضاءة والظلال في كامل الصورة، وانسجام درجات الألوان بين الوجه والملابس والخلفية، ووضوح متدرّج طبيعي من المركز إلى الأطراف.',
+          'عند إعادة بناء أي جزء ضعيف أو مفقود، اجعله متناسقًا تمامًا مع المناطق المجاورة في الإضاءة والملمس والمنظور، دون أي حدود واضحة بين المُرمَّم والأصلي.'
+        );
+      }
+
+      if(d.promptLength==='ultra'){
+        parts.splice(2,0,'تعامل مع الصورة باعتبارها مادة ترميم حساسة: لا تغيّر الهوية، لا تستبدل الوجه، لا تعيد تخيل الشخص، بل أصلح الموجود وكمّل النواقص بواقعية منسجمة مع الصورة الأصلية.');
+        parts.splice(parts.indexOf(result), 0, 'اجعل التفاصيل دقيقة لكن غير قاسية، والبشرة طبيعية دون مسح كامل للملمس، والعينين واضحتين دون تغيير الشكل أو النظرة. عند إزالة الكتابات أو الخربشات أو الشعارات، أعد بناء المنطقة خلفها بشكل منطقي وطبيعي ومتوافق مع الخلفية أو الوجه أو الملابس.');
+      }
+      return parts.join('\n\n');
+    }
+
+    function buildEnglish(d){
+      const idsToEnglish = {
+        'تشويش رقمي':'digital noise','ضبابية':'blur','تحبّب واضح':'heavy grain','بكسلة':'pixelation','ضغط صورة':'compression artifacts','ضعف دقة':'low resolution','ضعف حدة':'soft details','اهتزاز أو حركة':'motion blur','خطوط شاشة':'screen lines','تموجات أو مواريه':'moire patterns','آثار فيديو':'video artifacts','آثار مسح ضوئي':'scan artifacts',
+        'خدوش':'scratches','بقع':'stains','غبار واتساخ':'dust and dirt','تمزقات':'tears','ثنيات وتجاعيد':'folds and creases','تآكل الأطراف':'worn edges','أجزاء مفقودة':'missing parts','بهتان قديم':'fading','اصفرار الورق':'yellowing','حروق ضوئية':'light burns','آثار رطوبة':'water damage','تلف الخلفية':'background damage',
+        'كتابات على الصورة':'writing on the photo','تاريخ أو أرقام':'dates or numbers','شعارات أو علامات':'logos or marks','أختام':'stamps','خربشات بالقلم':'pen scribbles','ملصقات أو رموز':'stickers or symbols','أشرطة تشغيل أو واجهة':'playback UI overlays','علامة مائية مشوهة':'distorting watermark',
+        'إضاءة ضعيفة':'poor lighting','إضاءة زائدة':'overexposure','ظلال مزعجة':'harsh shadows','انحراف لوني':'color cast','تباين منخفض':'low contrast','ألوان باهتة':'washed-out colors','احمرار أو اصفرار زائد':'red/yellow color shift','إضاءة غير متوازنة':'uneven lighting'
+      };
+      const transList = arr => arr.map(x=>idsToEnglish[x]||x).join(', ');
+      const photoMap={
+        'صورة شخصية':'portrait photo','صورة طفل':'baby/child photo','صورة عائلية':'family photo','صورة جماعية':'group photo','صورة قديمة جدًا':'very old photo','صورة أبيض وأسود':'black-and-white photo','صورة من فيديو أو شاشة':'video or screen capture','صورة ممسوحة ضوئيًا':'scanned photo','صورة وثائقية أو أرشيفية':'documentary/archive photo','صورة هاتف قديمة':'old phone photo'
+      };
+      const bgMap={
+        'الحفاظ عليها قدر الإمكان':'preserve the background as much as possible',
+        'تنظيفها فقط دون تغيير جوهري':'only clean the background without major changes',
+        'تحسينها بشكل طبيعي':'improve the background naturally',
+        'ليست مهمة ويمكن تنظيفها بعمق':'the background is not important and may be cleaned deeply'
+      };
+      const sharpMap={
+        'طبيعي ومتوازن':'natural and balanced','واضح':'clear','واضح جدًا':'very clear','دقيق للغاية دون مبالغة':'highly detailed without exaggeration'
+      };
+
+      const tone = toneEnglish(d);
+      const parts=[];
+      if(tone.opening) parts.push(tone.opening);
+      parts.push(`Restore this ${photoMap[d.photoType]||'photo'} professionally while fully preserving the original identity, facial features, age, expression, pose, gaze direction, skin tone, clothing, and overall composition.`);
+      parts.push(`Main focus: ${d.focusArea}. Restoration level: ${d.restorationLevel}. Final look: ${d.finalLook}. Facial clarity should be ${sharpMap[d.sharpnessLevel]||'natural'}, realistic, and not over-sharpened. Background handling: ${bgMap[d.backgroundImportance]||'preserve where possible'}.`);
+
+      const allDamage=[...d.damageQuality,...d.damagePhysical,...d.damageText,...d.damageLight];
+      if(allDamage.length) parts.push(`Remove and repair the following issues if present: ${transList(allDamage)}.`);
+      const allRepair=[...d.repairClean,...d.repairRebuild,...d.repairEnhance,...d.repairOutput];
+      if(allRepair.length) parts.push(`Apply these restoration actions: ${allRepair.join(', ')}.`);
+      if(d.faceDetails.length || d.faceNatural.length) parts.push(`Enhance facial details naturally, especially: ${[...d.faceDetails,...d.faceNatural].join(', ')}. Keep the face realistic and avoid changing the person.`);
+
+      if(d.noColor){
+        parts.push('Do not colorize or recolor: keep the original color state of the image (color or black-and-white) exactly as it is. Only clean, sharpen, and improve contrast and lighting without altering the nature of the colors.');
+      } else {
+        parts.push(`Color handling: ${d.colorMode}. Use ${d.colorStyle}. If the image is faded or black and white, colorize it with realistic skin, clothing, and background colors without artificial saturation.`);
+      }
+
+      if(d.preserve.length) parts.push(`Strictly preserve: ${d.preserve.join(', ')}.`);
+      if(d.avoid.length) parts.push(`Avoid completely: ${d.avoid.join(', ')}.`);
+      if(d.customNotes) parts.push(`Additional user notes: ${d.customNotes}.`);
+      parts.push('Final result: a clean, sharp yet natural, high-resolution, realistic photograph with accurate colors, clearer facial features, no writing, no scribbles, no visible damage, and no artificial AI-generated appearance.');
+      if(d.priorityIdentity) parts.push('Top priority: preserve the original identity and facial features first, then improve quality, clarity, color, cleanup, and natural sharpness.');
+
+      if(d.promptLength==='short'){ const s=parts.slice(0,7); if(tone.closing) s.push(tone.closing); return s.join('\n\n'); }
+
+      if(d.promptLength==='long'){
+        parts.push('Keep the result consistent: unified lighting and shadows across the whole image, harmonious color tones between face, clothing, and background, and natural, gradual clarity from center to edges.');
+        parts.push('When rebuilding any weak or missing area, blend it seamlessly with neighboring regions in lighting, texture, and perspective, leaving no visible seam between restored and original parts.');
+      }
+      if(d.promptLength==='ultra'){
+        parts.push('When removing text, scribbles, timestamps, logos, or UI overlays, reconstruct the covered areas in a coherent, realistic way that matches the surrounding face, clothing, or background. Do not invent new facial features or beautify the person beyond restoration.');
+      }
+      if(tone.closing) parts.push(tone.closing);
+      return parts.join('\n\n');
+    }
+
+    function buildPrompt(d){
+      if(d.promptLang==='ar') return buildArabic(d);
+      if(d.promptLang==='en') return buildEnglish(d);
+      return 'النص العربي:\n\n' + buildArabic(d) + '\n\n------------------------------\n\nEnglish Prompt:\n\n' + buildEnglish(d);
+    }
+
+    function generatePrompt(showMsg=false){
+      const d = collect();
+      const out = buildPrompt(d);
+      $('#promptOutput').textContent = out;
+      clearStale();
+      updateMeta(out);
+      saveState();
+      if(showMsg) toast('تم توليد البرومبت باحترافية ✨');
+    }
+
+    function updateMeta(text){
+      const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+      const chars = text.length;
+      const selected = $$('input[type="checkbox"][data-group]:checked').length;
+      $('#wordCount').textContent = arabicNumber(words);
+      $('#charCount').textContent = arabicNumber(chars);
+      $('#selectedCount').textContent = arabicNumber(selected);
+    }
+
+    async function copyText(text){
+      if(!text) { toast('لا يوجد برومبت لنسخه'); return false; }
+      try{ await navigator.clipboard.writeText(text); toast('تم النسخ ✅'); return true; }
+      catch(e){ return fallbackCopy(text); }
+    }
+    function fallbackCopy(text){
+      try{
+        const ta=document.createElement('textarea'); ta.value=text;
+        ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta);
+        ta.select(); document.execCommand('copy'); ta.remove(); toast('تم النسخ ✅'); return true;
+      }catch(e){ toast('تعذّر النسخ، انسخه يدويًا'); return false; }
+    }
+    function copyPrompt(){ return copyText($('#promptOutput').textContent.trim()); }
+
+    /* نسخة مختصرة: نبنيها مباشرة دون التلاعب بالواجهة أو المخرج المعروض */
+    function copyShortVersion(){
+      const d = collect();
+      d.promptLength = 'short';
+      copyText(buildPrompt(d).trim());
+    }
+
+    function downloadTxt(){
+      const text=$('#promptOutput').textContent.trim();
+      if(!text){ toast('لا يوجد برومبت لتحميله'); return; }
+      const blob=new Blob([text],{type:'text/plain;charset=utf-8'});
+      const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='برومبت-ترميم-الصور.txt'; a.click();
+      setTimeout(()=>URL.revokeObjectURL(a.href), 1500); toast('تم تحميل ملف TXT');
+    }
+    function exportSettings(){
+      const state=getState();
+      const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json;charset=utf-8'});
+      const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='photo-restoration-prompt-settings.json'; a.click();
+      setTimeout(()=>URL.revokeObjectURL(a.href), 1500); toast('تم تصدير الإعدادات');
+    }
+    function importSettings(e){
+      const file=e.target.files[0]; if(!file) return;
+      const reader=new FileReader();
+      reader.onload=()=>{ try{ applyState(JSON.parse(reader.result)); generatePrompt(true); toast('تم استيراد الإعدادات'); } catch(err){ toast('ملف الإعدادات غير صالح'); } };
+      reader.readAsText(file); e.target.value='';
+    }
+
+    function getState(){
+      const state={fields:{}, checks:{}, theme:document.documentElement.dataset.theme||'light'};
+      $$('select, textarea, input[type="range"], input[type="text"]').forEach(el=>state.fields[el.id]=el.value);
+      state.fields.priorityIdentity=$('#priorityIdentity').checked;
+      $$('input[type="checkbox"][data-group]').forEach(el=>state.checks[`${el.dataset.group}:${el.value}`]=el.checked);
+      return state;
+    }
+    function applyState(state){
+      if(state.theme) document.documentElement.dataset.theme=state.theme;
+      if(state.fields) Object.entries(state.fields).forEach(([id,v])=>{const el=$('#'+id); if(el){ if(el.type==='checkbox') el.checked=!!v; else el.value=v; }});
+      if(state.checks) Object.entries(state.checks).forEach(([key,v])=>{const sep=key.indexOf(':'); const g=key.slice(0,sep); const value=key.slice(sep+1); const el=$(`input[data-group="${g}"][value="${value}"]`); if(el) el.checked=!!v;});
+      updateSeverityLabel();
+    }
+    function saveState(){ try{ localStorage.setItem('photoPromptGeneratorPro', JSON.stringify(getState())); }catch(e){} }
+    function restoreState(){
+      let raw; try{ raw=localStorage.getItem('photoPromptGeneratorPro'); }catch(e){ return; }
+      if(!raw) return;
+      try{ applyState(JSON.parse(raw)); }catch(e){}
+    }
+
+    async function resetAll(){
+      const ok = await confirmDialog('سيتم مسح كل اختياراتك والعودة للإعدادات الافتراضية. هل تريد المتابعة؟', {title:'إعادة الضبط', okText:'نعم، أعد الضبط'});
+      if(!ok) return;
+      try{ localStorage.removeItem('photoPromptGeneratorPro'); }catch(e){}
+      $$('select').forEach(s=>s.selectedIndex=0);
+      $$('textarea').forEach(t=>t.value='');
+      $('#damageSeverity').value=3;
+      $('#priorityIdentity').checked=true;
+      resetChecksOnly(); setDefaults(); updateSeverityLabel();
+      clearStale(); generatePrompt(true); toast('تمت إعادة الضبط');
+    }
+    function clearOutput(){ $('#promptOutput').textContent=''; updateMeta(''); }
+    function scrollToOutput(){ $('#outputBox').scrollIntoView({behavior:'smooth', block:'start'}); }
+    function toggleTheme(){
+      const root=document.documentElement;
+      root.dataset.theme = root.dataset.theme==='dark' ? 'light' : 'dark';
+      saveState(); toast(root.dataset.theme==='dark'?'تم تفعيل الوضع الداكن':'تم تفعيل الوضع الفاتح');
+    }
+
+    /* إتاحة الدوال المستدعاة من سمات onclick */
+    Object.assign(window, {generatePrompt, copyPrompt, copyShortVersion, downloadTxt, exportSettings, resetAll, clearOutput, scrollToOutput, toggleTheme, applyPreset});
+
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+  </script>
+</body>
+</html>
