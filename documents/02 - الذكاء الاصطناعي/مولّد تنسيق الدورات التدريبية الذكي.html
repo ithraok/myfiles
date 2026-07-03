@@ -1,0 +1,1022 @@
+
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>مولّد تنسيق الدورات التدريبية الذكي — النسخة الاحترافية</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- مكتبة قراءة ملفات Word (docx) داخل المتصفح -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.11.0/mammoth.browser.min.js"></script>
+  <style>
+    /* ============================================================
+       نظام الألوان — لوحة عصرية (Indigo · Cyan · Emerald)
+       ============================================================ */
+    :root {
+      --bg-main: #f4f6fb;
+      --bg-card: rgba(255, 255, 255, 0.72);
+      --bg-card-solid: #ffffff;
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-soft: rgba(79, 70, 229, 0.10);
+      --accent: #06b6d4;
+      --accent-2: #10b981;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: rgba(15, 23, 42, 0.08);
+      --border-strong: rgba(15, 23, 42, 0.14);
+      --shadow: 0 10px 30px -12px rgba(15, 23, 42, 0.18), 0 4px 12px -6px rgba(15, 23, 42, 0.08);
+      --shadow-lg: 0 24px 60px -20px rgba(79, 70, 229, 0.30);
+      --radius: 18px;
+      --radius-sm: 11px;
+      --transition: all 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+      --panel-bg: rgba(248, 250, 252, 0.7);
+      --input-bg: rgba(255, 255, 255, 0.85);
+      --output-bg: #0a0e1a;
+      --output-text: #7dd3fc;
+      --glow: rgba(79, 70, 229, 0.35);
+    }
+
+    body.dark-theme {
+      --bg-main: #070b16;
+      --bg-card: rgba(20, 28, 46, 0.62);
+      --bg-card-solid: #131a2c;
+      --primary: #818cf8;
+      --primary-hover: #6366f1;
+      --primary-soft: rgba(129, 140, 248, 0.14);
+      --accent: #22d3ee;
+      --accent-2: #34d399;
+      --text-main: #eef2ff;
+      --text-muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.09);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --shadow: 0 14px 40px -16px rgba(0, 0, 0, 0.6);
+      --shadow-lg: 0 24px 70px -20px rgba(99, 102, 241, 0.45);
+      --panel-bg: rgba(11, 17, 31, 0.5);
+      --input-bg: rgba(11, 17, 31, 0.55);
+      --output-bg: #04060d;
+      --output-text: #a5b4fc;
+      --glow: rgba(129, 140, 248, 0.45);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Cairo', sans-serif;
+      color: var(--text-main);
+      background-color: var(--bg-main);
+      overflow-x: hidden;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+
+    /* خلفية شفقية متحركة (Aurora Mesh) */
+    .aurora {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .aurora::before, .aurora::after {
+      content: "";
+      position: absolute;
+      width: 55vw;
+      height: 55vw;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.45;
+      animation: float 18s ease-in-out infinite;
+    }
+    .aurora::before {
+      top: -15%; right: -10%;
+      background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+    }
+    .aurora::after {
+      bottom: -20%; left: -10%;
+      background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+      animation-delay: -9s;
+    }
+    body.dark-theme .aurora::before,
+    body.dark-theme .aurora::after { opacity: 0.30; }
+
+    /* طبقة حُبيبات ناعمة لإضافة عُمق */
+    .grain {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(4%, 6%) scale(1.08); }
+      66% { transform: translate(-3%, -4%) scale(0.96); }
+    }
+
+    .wrap { width: min(1240px, calc(100% - 36px)); margin: auto; padding: 36px 0 60px; }
+
+    /* ============================ Hero ============================ */
+    .hero {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 42px 24px 38px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(16px) saturate(140%);
+      -webkit-backdrop-filter: blur(16px) saturate(140%);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      animation: fadeInDown 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .hero::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.06) 50%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .theme-toggle-container { position: absolute; top: 20px; left: 20px; z-index: 3; }
+
+    .btn-theme {
+      background: var(--input-bg);
+      border: 1px solid var(--border-strong);
+      color: var(--text-main);
+      padding: 9px 16px;
+      border-radius: 30px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex; align-items: center; gap: 7px;
+      transition: var(--transition);
+      backdrop-filter: blur(8px);
+    }
+    .btn-theme:hover { transform: translateY(-2px) scale(1.04); border-color: var(--primary); box-shadow: 0 6px 20px -8px var(--glow); }
+    .btn-theme:active { transform: scale(0.97); }
+
+    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-24px); } to { opacity: 1; transform: translateY(0); } }
+
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 18px;
+      border-radius: 30px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-weight: 700; font-size: 13.5px;
+      margin-bottom: 18px;
+      border: 1px solid var(--border-strong);
+      position: relative; z-index: 2;
+    }
+    .badge .pulse {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent-2);
+      box-shadow: 0 0 0 0 var(--accent-2);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.5); }
+      70% { box-shadow: 0 0 0 8px rgba(16,185,129,0); }
+      100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-family: 'Readex Pro', 'Cairo', sans-serif;
+      font-size: clamp(28px, 4.4vw, 46px);
+      font-weight: 700;
+      line-height: 1.25;
+      background: linear-gradient(110deg, var(--primary), var(--accent) 55%, var(--accent-2));
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+      position: relative; z-index: 2;
+    }
+    .hero-sub { color: var(--text-muted); font-size: 17.5px; margin: 0 auto; max-width: 640px; position: relative; z-index: 2; line-height: 1.7; }
+
+    /* ============================ Grid ============================ */
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(16px) saturate(140%);
+      -webkit-backdrop-filter: blur(16px) saturate(140%);
+      display: flex; flex-direction: column; overflow: hidden;
+      animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      box-shadow: var(--shadow);
+      opacity: 0;
+    }
+    .card:nth-child(1) { animation-delay: 0.12s; }
+    .card:nth-child(2) { animation-delay: 0.24s; position: sticky; top: 20px; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: translateY(0); } }
+
+    .card h2 {
+      margin: 0; padding: 20px 24px;
+      font-family: 'Readex Pro', 'Cairo', sans-serif;
+      font-size: 19px; font-weight: 700;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 11px;
+    }
+    .card h2::before { content: ""; width: 5px; height: 26px; border-radius: 4px; background: linear-gradient(var(--primary), var(--accent)); }
+
+    .body { padding: 22px; flex-grow: 1; display: flex; flex-direction: column; gap: 20px; }
+
+    /* ===================== Form Elements ===================== */
+    .group-panel {
+      padding: 20px;
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+    .group-panel:hover { border-color: var(--border-strong); }
+
+    .group-title {
+      font-size: 15.5px; font-weight: 800; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 9px; color: var(--text-main);
+    }
+    .group-title .hint { margin-inline-start: auto; font-size: 11.5px; font-weight: 600; color: var(--text-muted); }
+
+    label { display: block; margin-bottom: 8px; font-size: 13.5px; font-weight: 700; color: var(--text-main); }
+
+    input[type="text"], textarea, select {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 12px 15px;
+      border-radius: var(--radius-sm);
+      font-family: 'Cairo', sans-serif;
+      font-size: 14.5px;
+      transition: var(--transition);
+      margin-bottom: 15px;
+    }
+    select { cursor: pointer; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: left 14px center; padding-left: 38px;
+    }
+    input[type="text"]:hover, textarea:hover, select:hover { border-color: var(--border-strong); }
+    input[type="text"]:focus, textarea:focus, select:focus {
+      outline: none; border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-soft);
+    }
+    input:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    input[type="file"] {
+      width: 100%; padding: 11px;
+      background: var(--input-bg);
+      border: 1.5px dashed var(--border-strong);
+      border-radius: var(--radius-sm);
+      color: var(--text-muted); cursor: pointer;
+      font-family: 'Cairo', sans-serif; transition: var(--transition);
+    }
+    input[type="file"]:hover { border-color: var(--primary); background: var(--primary-soft); }
+    input[type="file"]::file-selector-button {
+      background: var(--primary); color: white; border: none;
+      padding: 8px 16px; border-radius: 8px; cursor: pointer;
+      font-family: 'Cairo', sans-serif; font-weight: 700; margin-left: 12px;
+      transition: var(--transition);
+    }
+    input[type="file"]::file-selector-button:hover { background: var(--primary-hover); }
+
+    textarea { min-height: 92px; resize: vertical; line-height: 1.6; }
+    .two-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    /* segmented control (أزرار مجموعة) */
+    .seg {
+      display: grid; gap: 6px; padding: 4px;
+      background: var(--input-bg); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); margin-bottom: 15px;
+    }
+    .seg.cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .seg button {
+      padding: 9px 6px; border-radius: 8px; border: none; background: transparent;
+      color: var(--text-muted); font-family: inherit; font-weight: 700; font-size: 13px;
+      cursor: pointer; transition: var(--transition);
+    }
+    .seg button.active { background: var(--primary); color: #fff; box-shadow: 0 4px 12px -4px var(--glow); }
+    .seg button:not(.active):hover { color: var(--text-main); background: var(--primary-soft); }
+
+    /* presets chips */
+    .presets { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      padding: 9px 14px; border-radius: 30px; border: 1px solid var(--border-strong);
+      background: var(--input-bg); color: var(--text-main);
+      font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer;
+      transition: var(--transition); display: inline-flex; align-items: center; gap: 6px;
+    }
+    .chip:hover { transform: translateY(-2px); border-color: var(--primary); box-shadow: 0 6px 16px -8px var(--glow); }
+    .chip:active { transform: scale(0.96); }
+    .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    /* ===================== Checkboxes ===================== */
+    .checks { display: grid; grid-template-columns: repeat(auto-fit, minmax(205px, 1fr)); gap: 11px; }
+    .check-item {
+      display: flex; align-items: flex-start; gap: 10px; padding: 12px 13px;
+      background: var(--input-bg); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); cursor: pointer;
+      transition: var(--transition); font-size: 13px; font-weight: 700; line-height: 1.45;
+      position: relative; overflow: hidden;
+    }
+    .check-item::before {
+      content: ""; position: absolute; inset-inline-start: 0; top: 0; bottom: 0; width: 3px;
+      background: var(--primary); transform: scaleY(0); transform-origin: center;
+      transition: transform 0.3s ease;
+    }
+    .check-item:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 6px 16px -10px var(--glow); }
+    .check-item:has(input:checked)::before { transform: scaleY(1); }
+    .check-item:has(input:checked) { background: var(--primary-soft); border-color: var(--border-strong); }
+    .check-item input { margin-top: 1px; accent-color: var(--primary); width: 17px; height: 17px; flex-shrink: 0; cursor: pointer; }
+
+    .check-item.important { border-color: rgba(245, 158, 11, 0.4); color: #b45309; background: rgba(254, 243, 199, 0.45); }
+    body.dark-theme .check-item.important { border-color: rgba(245, 158, 11, 0.32); color: #fcd34d; background: rgba(245, 158, 11, 0.08); }
+    .check-item.important::before { background: var(--warn); }
+    .check-item.important:hover { border-color: var(--warn); }
+
+    .mini-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .mini-btn {
+      padding: 7px 13px; border-radius: 8px; border: 1px solid var(--border-strong);
+      background: var(--input-bg); color: var(--text-muted);
+      font-family: inherit; font-weight: 700; font-size: 12px; cursor: pointer; transition: var(--transition);
+    }
+    .mini-btn:hover { color: var(--primary); border-color: var(--primary); background: var(--primary-soft); }
+    .count-pill { margin-inline-start: auto; align-self: center; font-size: 12px; font-weight: 800; color: var(--primary); }
+
+    /* ===================== Buttons ===================== */
+    .btns { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 4px; }
+    button { font-family: inherit; }
+    .btn-primary, .btn-secondary, .btn-danger {
+      padding: 14px; border: none; border-radius: var(--radius-sm);
+      font-weight: 800; font-size: 14.5px; cursor: pointer; transition: var(--transition);
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-primary { background: linear-gradient(120deg, var(--primary), var(--primary-hover)); color: white; box-shadow: 0 8px 24px -10px var(--glow); }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 30px -10px var(--glow); }
+    .btn-primary:active { transform: translateY(-1px) scale(0.99); }
+    .btn-secondary { background: var(--input-bg); color: var(--text-main); border: 1px solid var(--border-strong); }
+    .btn-secondary:hover { transform: translateY(-3px); border-color: var(--primary); }
+    .btn-danger { background: rgba(239, 68, 68, 0.08); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); }
+    body.dark-theme .btn-danger { color: #fca5a5; }
+    .btn-danger:hover { background: rgba(239, 68, 68, 0.15); transform: translateY(-3px); }
+    .btn-small { padding: 7px 13px; font-size: 12px; width: fit-content; margin-top: 10px;
+      border-radius: 8px; border: 1px solid rgba(239,68,68,0.2); background: rgba(239,68,68,0.08); color: var(--danger); font-weight:700; cursor:pointer; transition: var(--transition); }
+    .btn-small:hover { background: rgba(239,68,68,0.16); }
+
+    /* ===================== Output ===================== */
+    .stats-bar {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px;
+    }
+    .stat {
+      text-align: center; padding: 12px 6px; border-radius: var(--radius-sm);
+      background: var(--panel-bg); border: 1px solid var(--border);
+    }
+    .stat b { display: block; font-family: 'Readex Pro', sans-serif; font-size: 19px; color: var(--primary); line-height: 1.2; }
+    .stat span { font-size: 11px; color: var(--text-muted); font-weight: 600; }
+
+    .output-container {
+      flex-grow: 1; background: var(--output-bg);
+      border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+      display: flex; flex-direction: column; overflow: hidden; transition: var(--transition);
+      position: relative;
+    }
+    .output-container.flash { box-shadow: 0 0 0 3px var(--accent-2); }
+    .output-header {
+      padding: 12px 16px; background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .output-header .ttl { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.45); display: flex; align-items: center; gap: 8px; }
+    .dots span { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-left: 6px; }
+    .dots span:nth-child(1) { background: #ef4444; } .dots span:nth-child(2) { background: #f59e0b; } .dots span:nth-child(3) { background: #10b981; }
+    .output {
+      padding: 20px; color: var(--output-text);
+      font-size: 14.5px; line-height: 1.85; white-space: pre-wrap; word-wrap: break-word;
+      overflow-y: auto; flex-grow: 1; max-height: 560px;
+      scrollbar-width: thin; scrollbar-color: var(--primary) transparent;
+      font-family: 'Cairo', monospace;
+    }
+    .output::-webkit-scrollbar { width: 8px; }
+    .output::-webkit-scrollbar-thumb { background-color: var(--primary); border-radius: 4px; }
+    .output mark { background: rgba(99,102,241,0.25); color: #c7d2fe; border-radius: 3px; padding: 0 2px; }
+
+    /* ملء الشاشة للمخرج */
+    .output-container.full {
+      position: fixed; inset: 16px; z-index: 2000; max-height: none; border-radius: var(--radius);
+      box-shadow: 0 40px 100px -20px rgba(0,0,0,0.7);
+    }
+    .output-container.full .output { max-height: none; }
+    .icon-btn {
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.6); width: 28px; height: 28px; border-radius: 7px; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center; transition: var(--transition); font-size: 13px;
+    }
+    .icon-btn:hover { background: rgba(255,255,255,0.16); color: #fff; }
+
+    /* ===================== Toast ===================== */
+    .toast {
+      position: fixed; bottom: 26px; left: 50%;
+      transform: translateX(-50%) translateY(120px);
+      background: linear-gradient(120deg, var(--accent-2), var(--accent));
+      color: white; padding: 13px 26px; border-radius: 12px;
+      font-weight: 700; box-shadow: 0 12px 30px -8px rgba(16, 185, 129, 0.5);
+      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1); z-index: 3000;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.err { background: linear-gradient(120deg, #f43f5e, #ef4444); box-shadow: 0 12px 30px -8px rgba(239,68,68,0.5); }
+
+    footer { text-align: center; margin-top: 36px; padding: 24px; color: var(--text-muted); font-size: 13.5px; border-top: 1px solid var(--border); }
+    footer b { color: var(--primary); }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 980px) {
+      .grid { grid-template-columns: 1fr; }
+      .card:nth-child(2) { position: static; }
+    }
+    @media (max-width: 600px) {
+      .two-cols, .btns { grid-template-columns: 1fr; }
+      .stats-bar { grid-template-columns: repeat(2, 1fr); }
+      .output { max-height: 420px; }
+      .theme-toggle-container { position: static; margin-bottom: 14px; display: inline-block; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+      .card { opacity: 1 !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="aurora"></div>
+  <div class="grain"></div>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="theme-toggle-container">
+        <button id="themeToggleBtn" class="btn-theme" onclick="toggleTheme()">🌙 الوضع الليلي</button>
+      </div>
+      <div class="badge"><span class="pulse"></span> أداة ذكية بلمسة احترافية</div>
+      <h1>مولّد تنسيق الدورات التدريبية</h1>
+      <p class="hero-sub">حوّل تفريغات المحتوى إلى مستندات تعليمية منظّمة بصياغة بشرية عالية الجودة — مع تحكم دقيق في التنسيق والإخراج.</p>
+    </section>
+
+    <section class="grid">
+      <!-- ================= لوحة الإعدادات ================= -->
+      <div class="card">
+        <h2>⚙️ إعدادات البرومبت</h2>
+        <div class="body">
+
+          <!-- القوالب الجاهزة -->
+          <div class="group-panel">
+            <div class="group-title">⚡ قوالب جاهزة <span class="hint">انقر لتطبيق إعداد كامل</span></div>
+            <div class="presets" id="presets">
+              <button class="chip" data-preset="full" onclick="applyPreset('full', this)">📚 حقيبة تدريبية كاملة</button>
+              <button class="chip" data-preset="lecture" onclick="applyPreset('lecture', this)">🎥 تفريغ محاضرة</button>
+              <button class="chip" data-preset="quick" onclick="applyPreset('quick', this)">⚡ مذكرة سريعة</button>
+              <button class="chip" data-preset="review" onclick="applyPreset('review', this)">📝 ملخص مراجعة</button>
+            </div>
+          </div>
+
+          <!-- بيانات المستند -->
+          <div class="group-panel">
+            <div class="group-title">🧾 بيانات المستند</div>
+            <label>عنوان المستند</label>
+            <input id="docTitle" type="text" value="استراتيجيات التصميم التعليمي" oninput="saveAndGenerate()" />
+
+            <div class="two-cols">
+              <div>
+                <label>نوع المحتوى</label>
+                <select id="docType" onchange="saveAndGenerate()">
+                  <option>تفريغ دورة تدريبية</option>
+                  <option>تفريغ محاضرة فيديو تعليمية</option>
+                  <option>ملخص حقيبة تدريبية</option>
+                  <option>مذكرة تعليمية</option>
+                  <option>دليل إرشادي / عملي</option>
+                  <option>مقال تعليمي</option>
+                </select>
+              </div>
+              <div>
+                <label>إعداد وتنسيق</label>
+                <input id="preparedBy" type="text" value="الأستاذ عبدالله بن رشيد الدريبي" oninput="saveAndGenerate()" />
+              </div>
+            </div>
+
+            <label>وصف مختصر للغلاف</label>
+            <input id="description" type="text" value="ملخص منسّق لدورة تدريبية تعليمية" oninput="saveAndGenerate()" />
+
+            <label>الفئة المستهدفة (اختياري)</label>
+            <input id="audience" type="text" placeholder="مثال: المعلمون والمدربون التربويون" oninput="saveAndGenerate()" />
+
+            <label>أسلوب الصياغة</label>
+            <select id="tone" onchange="saveAndGenerate()">
+              <option>واضح ومنظّم ومناسب لمذكرة تعليمية، مع الحفاظ على صياغة بشرية طبيعية</option>
+              <option>تربوي احترافي مناسب للتقديم والمشاركة، خالٍ من التكلّف الآلي</option>
+              <option>مختصر ومنظّم بنقاط مراجعة سريعة ومباشرة</option>
+              <option>رسمي أكاديمي رصين مع دقة في المصطلحات</option>
+              <option>مبسّط وودود يناسب المبتدئين وغير المتخصصين</option>
+            </select>
+          </div>
+
+          <!-- التحكم في الإخراج -->
+          <div class="group-panel">
+            <div class="group-title">🎚️ مستوى التفصيل وصيغة الإخراج</div>
+            <label>مستوى التفصيل</label>
+            <div class="seg cols-3" id="depthSeg">
+              <button data-val="مختصر" onclick="setSeg('depth', this)">مختصر</button>
+              <button data-val="متوازن" class="active" onclick="setSeg('depth', this)">متوازن</button>
+              <button data-val="مفصّل" onclick="setSeg('depth', this)">مفصّل</button>
+            </div>
+            <input type="hidden" id="depth" value="متوازن">
+
+            <label>صيغة المخرج</label>
+            <div class="seg cols-3" id="formatSeg">
+              <button data-val="word" class="active" onclick="setSeg('format', this)">📄 جاهز للورد</button>
+              <button data-val="markdown" onclick="setSeg('format', this)">⬇️ Markdown</button>
+              <button data-val="html" onclick="setSeg('format', this)">🌐 HTML</button>
+            </div>
+            <input type="hidden" id="format" value="word">
+          </div>
+
+          <!-- خيارات التنسيق -->
+          <div class="group-panel">
+            <div class="group-title">🎨 خيارات التنسيق الشاملة</div>
+            <div class="mini-actions">
+              <button class="mini-btn" onclick="bulkChecks(true)">✓ تحديد الكل</button>
+              <button class="mini-btn" onclick="bulkChecks(false)">✕ إلغاء الكل</button>
+              <button class="mini-btn" onclick="bulkChecks('toggle')">⇄ عكس التحديد</button>
+              <span class="count-pill" id="optCount">0 / 0</span>
+            </div>
+            <div class="checks">
+              <label class="check-item"><input type="checkbox" id="cover" checked onchange="saveAndGenerate()"> إضافة غلاف احترافي</label>
+              <label class="check-item"><input type="checkbox" id="headings" checked onchange="saveAndGenerate()"> تنسيق العناوين (رئيسي وفرعي)</label>
+              <label class="check-item"><input type="checkbox" id="rtl" checked onchange="saveAndGenerate()"> ضبط اتجاه النص (RTL)</label>
+              <label class="check-item"><input type="checkbox" id="humanTouch" checked onchange="saveAndGenerate()"> صياغة بشرية طبيعية 100%</label>
+              <label class="check-item"><input type="checkbox" id="tables" checked onchange="saveAndGenerate()"> تحسين الجداول وتلوين رؤوسها</label>
+              <label class="check-item"><input type="checkbox" id="numbering" checked onchange="saveAndGenerate()"> أرقام عربية (١، ٢، ٣)</label>
+              <label class="check-item"><input type="checkbox" id="boxes" checked onchange="saveAndGenerate()"> مربعات للتعريفات والتنبيهات</label>
+              <label class="check-item"><input type="checkbox" id="quotes" checked onchange="saveAndGenerate()"> إبراز الاقتباسات بشكل مميز</label>
+              <label class="check-item"><input type="checkbox" id="practical" checked onchange="saveAndGenerate()"> إضافة خطوات وتطبيقات عملية</label>
+              <label class="check-item"><input type="checkbox" id="questions" checked onchange="saveAndGenerate()"> أسئلة تفكير ناقد وتقويم</label>
+              <label class="check-item"><input type="checkbox" id="summary" checked onchange="saveAndGenerate()"> خلاصات في نهاية المحاور</label>
+              <label class="check-item"><input type="checkbox" id="conclusion" checked onchange="saveAndGenerate()"> خاتمة تربوية مهنية</label>
+              <label class="check-item"><input type="checkbox" id="toc" checked onchange="saveAndGenerate()"> فهرس المحتويات</label>
+              <label class="check-item"><input type="checkbox" id="keywords" onchange="saveAndGenerate()"> استخلاص كلمات مفتاحية</label>
+              <label class="check-item"><input type="checkbox" id="objectives" onchange="saveAndGenerate()"> أهداف تعليمية في البداية</label>
+              <label class="check-item"><input type="checkbox" id="signature" checked onchange="saveAndGenerate()"> توقيع ختامي</label>
+            </div>
+          </div>
+
+          <!-- ضوابط صارمة -->
+          <div class="group-panel">
+            <div class="group-title">🛡️ ضوابط صارمة</div>
+            <div class="checks" style="grid-template-columns: 1fr 1fr;">
+              <label class="check-item important"><input type="checkbox" id="noRefs" checked onchange="saveAndGenerate()"> حذف الكلمات التحريرية</label>
+              <label class="check-item important"><input type="checkbox" id="noInvent" checked onchange="saveAndGenerate()"> منع اختراع المراجع</label>
+              <label class="check-item important"><input type="checkbox" id="preserveMeaning" checked onchange="saveAndGenerate()"> الحفاظ على المعنى كاملاً</label>
+              <label class="check-item important"><input type="checkbox" id="noEmoji" onchange="saveAndGenerate()"> منع الرموز التعبيرية</label>
+            </div>
+            <label style="margin-top:14px;">كلمات ممنوعة بين الأقواس</label>
+            <input id="blockedWords" type="text" value="مرجع، مصدر، Citation، Reference، صفحة" oninput="saveAndGenerate()" />
+          </div>
+
+          <!-- تعليمات إضافية -->
+          <div class="group-panel">
+            <div class="group-title">✍️ تعليمات إضافية</div>
+            <textarea id="extra" placeholder="اكتب أي تعليمات إضافية هنا..." oninput="saveAndGenerate()"></textarea>
+          </div>
+
+          <!-- إرفاق الملف -->
+          <div class="group-panel">
+            <div class="group-title">📎 إرفاق المحتوى (اختياري)</div>
+            <label>ارفع ملفاً لدمج محتواه مباشرة في نهاية البرومبت</label>
+            <input type="file" id="fileUpload" accept=".txt,.md,.markdown,.doc,.docx,text/plain,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword" onchange="handleFileUpload(event)">
+            <p style="font-size:12px; color:var(--text-muted); margin:9px 0 0; line-height:1.6;">
+              يدعم: <b>TXT</b> · <b>Markdown</b> · <b>Word (.docx)</b>.
+            </p>
+            <div id="fileStatus" class="hidden" style="font-size: 13px; color: var(--accent-2); margin-top: 10px; font-weight: 700;"></div>
+            <button class="btn-small hidden" id="removeFileBtn" onclick="removeFile()">إزالة الملف</button>
+          </div>
+
+          <div class="btns">
+            <button class="btn-primary" onclick="copyPrompt()">📋 نسخ البرومبت</button>
+            <button class="btn-secondary" onclick="downloadPrompt()">⬇️ تحميل TXT</button>
+            <button class="btn-secondary" onclick="exportSettings()">📤 تصدير الإعدادات</button>
+            <button class="btn-secondary" onclick="$('importFile').click()">📥 استيراد الإعدادات</button>
+            <input type="file" id="importFile" accept=".json" class="hidden" onchange="importSettings(event)">
+            <button class="btn-danger" onclick="resetForm()" style="grid-column: 1 / -1;">↺ استعادة الإعدادات الافتراضية</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= النتيجة ================= -->
+      <div class="card">
+        <h2>✨ البرومبت الناتج</h2>
+        <div class="body" style="padding: 18px;">
+          <div class="stats-bar">
+            <div class="stat"><b id="statChars">0</b><span>حرف</span></div>
+            <div class="stat"><b id="statWords">0</b><span>كلمة</span></div>
+            <div class="stat"><b id="statTokens">0</b><span>توكنز تقريبي</span></div>
+            <div class="stat"><b id="statRules">0</b><span>ضابط فعّال</span></div>
+          </div>
+          <div class="output-container" id="outputContainer">
+            <div class="output-header">
+              <span class="ttl"><span class="dots"><span></span><span></span><span></span></span> مُخرج متوافق مع الذكاء الاصطناعي</span>
+              <button class="icon-btn" onclick="toggleFullscreen()" title="ملء الشاشة">⛶</button>
+            </div>
+            <div id="output" class="output"></div>
+          </div>
+          <p style="text-align: center; color: var(--text-muted); font-size: 12.5px; margin: 0;">البرومبت يتحدّث تلقائياً مع كل تغيير، جاهز للنسخ دائماً.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>برمجة وتطوير: <b>عبدالله بن رشيد الدريبي</b> | محتوى تقني وتعليمي</footer>
+  </main>
+
+  <div id="toast" class="toast">تم الإجراء بنجاح!</div>
+
+<script>
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const checked = id => { const el = $(id); return el && el.checked; };
+  let uploadedFileContent = "";
+  let uploadedFileName = "";
+  const MAX_FILE_BYTES = 2 * 1024 * 1024; // حد أقصى 2 ميجابايت
+
+  // معرّفات كل خيارات التنسيق (للعدّاد والتحكم الجماعي)
+  const OPTION_IDS = ['cover','headings','rtl','humanTouch','tables','numbering','boxes',
+    'quotes','practical','questions','summary','conclusion','toc','keywords','objectives','signature'];
+
+  /* ====================== التحميل ====================== */
+  window.onload = () => {
+    if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-theme');
+    updateThemeButton();
+
+    const saved = localStorage.getItem('promptGeneratorData');
+    if (saved) {
+      try {
+        const data = JSON.parse(saved);
+        Object.keys(data).forEach(key => {
+          const el = $(key);
+          if (el && key !== 'fileUpload') {
+            if (el.type === 'checkbox') el.checked = data[key];
+            else el.value = data[key];
+          }
+        });
+        syncSegFromHidden('depth', 'depthSeg');
+        syncSegFromHidden('format', 'formatSeg');
+      } catch (e) { console.warn('تعذر استرجاع البيانات المحفوظة', e); }
+    }
+    refreshUI();
+  };
+
+  /* ====================== المظهر ====================== */
+  function toggleTheme() {
+    document.body.classList.toggle('dark-theme');
+    localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
+    updateThemeButton();
+  }
+  function updateThemeButton() {
+    const isDark = document.body.classList.contains('dark-theme');
+    $('themeToggleBtn').innerHTML = isDark ? '☀️ الوضع المضيء' : '🌙 الوضع الليلي';
+  }
+
+  /* ====================== الأزرار المجموعة (segmented) ====================== */
+  function setSeg(hiddenId, btn) {
+    const seg = btn.parentElement;
+    seg.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    $(hiddenId).value = btn.dataset.val;
+    saveAndGenerate();
+  }
+  function syncSegFromHidden(hiddenId, segId) {
+    const val = $(hiddenId).value;
+    $(segId).querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.val === val));
+  }
+
+  /* ====================== التحكم الجماعي بالخيارات ====================== */
+  function bulkChecks(mode) {
+    OPTION_IDS.forEach(id => {
+      const el = $(id); if (!el) return;
+      if (mode === 'toggle') el.checked = !el.checked;
+      else el.checked = mode;
+    });
+    saveAndGenerate();
+  }
+  function updateOptionCount() {
+    const total = OPTION_IDS.length;
+    const on = OPTION_IDS.filter(id => checked(id)).length;
+    $('optCount').textContent = `${on} / ${total}`;
+  }
+
+  /* ====================== القوالب الجاهزة ====================== */
+  const PRESETS = {
+    full:    { on: OPTION_IDS, depth: 'مفصّل',  format: 'word', tone: 1 },
+    lecture: { on: ['cover','headings','rtl','humanTouch','boxes','practical','summary','toc','signature','objectives'], depth: 'متوازن', format: 'word', tone: 0, type: 'تفريغ محاضرة فيديو تعليمية' },
+    quick:   { on: ['headings','rtl','humanTouch','numbering','summary'], depth: 'مختصر', format: 'word', tone: 2, type: 'مذكرة تعليمية' },
+    review:  { on: ['headings','rtl','numbering','boxes','summary','keywords'], depth: 'مختصر', format: 'markdown', tone: 2, type: 'ملخص حقيبة تدريبية' },
+  };
+  function applyPreset(name, btn) {
+    const p = PRESETS[name]; if (!p) return;
+    OPTION_IDS.forEach(id => { const el = $(id); if (el) el.checked = p.on.includes(id); });
+    if (p.depth)  { $('depth').value = p.depth;  syncSegFromHidden('depth', 'depthSeg'); }
+    if (p.format) { $('format').value = p.format; syncSegFromHidden('format', 'formatSeg'); }
+    if (typeof p.tone === 'number') $('tone').selectedIndex = p.tone;
+    if (p.type) $('docType').value = p.type;
+    document.querySelectorAll('#presets .chip').forEach(c => c.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    saveAndGenerate();
+    showToast('⚡ تم تطبيق القالب');
+  }
+
+  /* ====================== رفع الملف ====================== */
+  function handleFileUpload(event) {
+    const file = event.target.files[0];
+    if (!file) { removeFile(); return; }
+    if (file.size > MAX_FILE_BYTES) {
+      showToast('⚠️ حجم الملف يتجاوز 2 ميجابايت', true);
+      $('fileUpload').value = ""; return;
+    }
+    const name = file.name.toLowerCase();
+
+    if (name.endsWith('.docx')) {
+      readWordDocx(file);                       // ملفات Word الحديثة
+    } else if (name.endsWith('.doc')) {
+      showToast('⚠️ صيغة .doc القديمة غير مدعومة — احفظه كـ .docx', true);
+      $('fileUpload').value = "";
+    } else {
+      readPlainText(file);                      // TXT / MD
+    }
+  }
+
+  // قراءة الملفات النصية (txt / md)
+  function readPlainText(file) {
+    const reader = new FileReader();
+    reader.onload = e => finishFileRead(file, e.target.result || "");
+    reader.onerror = () => showToast('⚠️ تعذّرت قراءة الملف', true);
+    reader.readAsText(file);
+  }
+
+  // قراءة ملفات Word (docx) عبر مكتبة mammoth واستخراج النص الخام
+  function readWordDocx(file) {
+    if (typeof mammoth === 'undefined') {
+      showToast('⚠️ تعذّر تحميل قارئ Word (تأكّد من الاتصال بالإنترنت)', true);
+      $('fileUpload').value = ""; return;
+    }
+    showToast('⏳ جارٍ قراءة ملف Word...');
+    const reader = new FileReader();
+    reader.onload = e => {
+      mammoth.extractRawText({ arrayBuffer: e.target.result })
+        .then(result => {
+          const text = (result.value || "").trim();
+          if (!text) { showToast('⚠️ الملف فارغ أو لا يحتوي نصاً قابلاً للقراءة', true); $('fileUpload').value = ""; return; }
+          finishFileRead(file, text);
+        })
+        .catch(() => { showToast('⚠️ تعذّر تحليل ملف Word', true); $('fileUpload').value = ""; });
+    };
+    reader.onerror = () => showToast('⚠️ تعذّرت قراءة الملف', true);
+    reader.readAsArrayBuffer(file);
+  }
+
+  // إنهاء عملية القراءة وتحديث الواجهة
+  function finishFileRead(file, content) {
+    uploadedFileContent = content;
+    uploadedFileName = file.name;
+    const kb = (file.size / 1024).toFixed(1);
+    $('fileStatus').innerHTML = `✅ تم قراءة الملف: <bdi>${escapeHtml(file.name)}</bdi> (${kb} ك.ب) — سيُدمج مع البرومبت.`;
+    $('fileStatus').classList.remove('hidden');
+    $('removeFileBtn').classList.remove('hidden');
+    saveAndGenerate();
+  }
+  function removeFile() {
+    $('fileUpload').value = "";
+    uploadedFileContent = ""; uploadedFileName = "";
+    $('fileStatus').classList.add('hidden');
+    $('removeFileBtn').classList.add('hidden');
+    saveAndGenerate();
+  }
+  function escapeHtml(s) { return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+  /* ====================== توليد قائمة الضوابط ====================== */
+  const AR_DIGITS = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+  const toArabic = n => String(n).split('').map(d => AR_DIGITS[+d] ?? d).join('');
+
+  function buildGuidelines() {
+    const items = [];
+    const preparedBy = $('preparedBy').value.trim() || 'الأستاذ عبدالله بن رشيد الدريبي';
+    const desc = $('description').value.trim();
+
+    if (checked('cover')) items.push(`إضافة غلاف احترافي في البداية يتضمن: العنوان الرئيسي${desc ? `، ووصفاً تعريفياً موجزاً ("${desc}")` : ''}، واسم المُعِدّ والمنسّق، ضمن تصميم تعليمي تقني هادئ ومتزن.`);
+    if (checked('objectives')) items.push(`إدراج قائمة "الأهداف التعليمية" المختصرة في مستهلّ المستند توضح ما سيكتسبه القارئ بعد المطالعة.`);
+    if (checked('headings')) items.push(`تقسيم المحتوى إلى عناوين رئيسية وفرعية بترتيب هرمي واضح، وتكبير العناوين الكبرى، وإبراز المصطلحات المهمة بخط عريض (Bold).`);
+    if (checked('rtl')) items.push(`ضبط اتجاه كافة النصوص والجداول ومحاذاتها لتكون عربية سليمة من اليمين إلى اليسار (RTL).`);
+    if (checked('humanTouch')) items.push(`**[هام جداً]** اعتماد صياغة بشرية طبيعية بنسبة عالية جداً في الربط بين الجُمل، والابتعاد التام عن الأسلوب الآلي أو الروبوتي المتكرر.`);
+    if (checked('tables')) items.push(`تنسيق الجداول باتجاه عربي مع تلوين رؤوسها، وتوحيد الخطوط، واستخدام حدود وتظليل خفيف لتسهيل القراءة.`);
+    if (checked('numbering')) items.push(`استخدام الترقيم العربي (١، ٢، ٣) أو الحرفي (أ، ب، ج)، وتنظيم الأفكار في قوائم نقطية ورقمية واضحة.`);
+    if (checked('boxes')) items.push(`عزل التعريفات الهامة والتنبيهات الجوهرية والأمثلة التطبيقية في مربعات نصية مستقلة للفت الانتباه.`);
+    if (checked('quotes')) items.push(`إبراز الاقتباسات والنصوص المرجعية بتنسيق مرئي مميز ومستقل عن النص العادي.`);
+    if (checked('practical')) items.push(`استخراج الجوانب العملية من النص وتحويلها إلى (خطوات تطبيقية) واضحة قابلة للتنفيذ من قِبل المتدرّب.`);
+    if (checked('questions')) items.push(`صياغة سؤال تقويمي أو سؤال "تفكير ناقد" قصير في نهاية كل محور رئيسي لتحفيز المتدربين.`);
+    if (checked('summary')) items.push(`تذييل كل محور رئيسي بـ "خلاصة سريعة" تُلخّص أهم ما ورد فيه.`);
+    if (checked('keywords')) items.push(`استخلاص قائمة بأبرز الكلمات والمصطلحات المفتاحية في نهاية كل محور أو في صندوق جانبي.`);
+    if (checked('conclusion')) items.push(`كتابة خاتمة تربوية ومهنية تُلخّص أهمية الموضوع وتربطه بالممارسة العملية.`);
+    if (checked('toc')) items.push(`إنشاء فهرس محتويات دقيق وشامل (في بداية المستند).`);
+    if (checked('signature')) items.push(`إضافة توقيع ختامي في أسفل المستند بالنص: "تم الإعداد والتنسيق بواسطة: ${preparedBy}".`);
+
+    // ضوابط صارمة
+    if (checked('preserveMeaning')) items.push(`الحفاظ الكامل على المعنى والأفكار الجوهرية للنص الأصلي دون حذف أو تحريف للمضمون.`);
+    if (checked('noRefs')) items.push(`تنظيف النص: حذف أي كلمات تحريرية بين الأقواس مثل (${$('blockedWords').value.trim() || '—'}).`);
+    if (checked('noInvent')) items.push(`الأمانة العلمية: يُمنع منعاً باتاً اختراع أو توليد مراجع أو مصادر لم تُذكر صراحة في النص الأصلي.`);
+    if (checked('noEmoji')) items.push(`عدم استخدام أي رموز تعبيرية (Emojis) داخل المستند، والاكتفاء بالتنسيق النصي الرصين.`);
+
+    return items.map((t, i) => `${toArabic(i + 1)}. ${t}`).join('\n');
+  }
+
+  function outputFormatLine() {
+    const f = $('format').value;
+    if (f === 'markdown') return `- أخرِج المحتوى بصيغة Markdown منظّمة (عناوين #، قوائم -، جداول | |، نص عريض **)، جاهزة للنسخ.`;
+    if (f === 'html') return `- أخرِج المحتوى بصيغة HTML بسيطة ونظيفة باستخدام وسوم دلالية (h1, h2, p, ul, table) مع السمة dir="rtl".`;
+    return `- قدّم المخرج ككتلة نصية نظيفة جاهزة للّصق المباشر في Microsoft Word دون أكواد برمجية.`;
+  }
+  function depthLine() {
+    const d = $('depth').value;
+    if (d === 'مختصر') return `اجعل المحتوى مركّزاً وموجزاً يُبرز الأفكار الجوهرية فقط دون إسهاب أو حشو.`;
+    if (d === 'مفصّل') return `وسّع الشرح بأمثلة وتوضيحات إضافية تثري الفهم، مع تجنّب التكرار والحشو.`;
+    return `حافظ على توازن دقيق بين الإيجاز والتفصيل بما يخدم وضوح الفكرة.`;
+  }
+
+  /* ====================== توليد البرومبت ====================== */
+  function generatePrompt() {
+    const title = $('docTitle').value.trim() || 'استراتيجيات التصميم التعليمي';
+    const type = $('docType').value;
+    const tone = $('tone').value;
+    const audience = $('audience').value.trim();
+    const extra = $('extra').value.trim();
+
+    let prompt = `**الدور (Role):**
+أنت خبير متمرّس في التصميم التعليمي وتنسيق المحتوى وتطوير الحقائب التدريبية.
+
+**المهمة (Task):**
+أعد صياغة وتنسيق المستند المرفق، وهو "${type}" بعنوان: "${title}".
+الهدف تحويل هذا النص الخام إلى مستند تعليمي منسّق ومهني وقابل للتقديم.${audience ? `\nالفئة المستهدفة: ${audience}.` : ''}
+
+**أسلوب الصياغة المطلوب (Tone):**
+${tone}
+
+**مستوى التفصيل (Depth):**
+${depthLine()}
+
+**ضوابط التنسيق والإخراج (Guidelines):**
+${buildGuidelines()}${extra ? `\n\n**تعليمات إضافية من المستخدم:**\n- ${extra}` : ''}
+
+**محددات الإخراج (Output Constraints):**
+- لا تكتب أي مقدمات أو شروح تمهيدية من قبيل (بناءً على طلبك، إليك المستند...).
+${outputFormatLine()}
+- ابدأ بالتنفيذ فوراً.`;
+
+    if (uploadedFileContent.trim() !== "") {
+      prompt += `\n\n**النص المراد تنسيقه:**\n${uploadedFileContent}`;
+    }
+
+    $('output').textContent = prompt;
+    updateStats(prompt);
+  }
+
+  /* ====================== الإحصائيات ====================== */
+  function updateStats(text) {
+    const chars = text.length;
+    const words = (text.trim().match(/\S+/g) || []).length;
+    const tokens = Math.ceil(chars / 3.4); // تقدير تقريبي للعربية
+    const rules = (buildGuidelines().match(/^\s*\S+\.\s/gm) || []).length;
+    animateNumber($('statChars'), chars);
+    animateNumber($('statWords'), words);
+    animateNumber($('statTokens'), tokens);
+    $('statRules').textContent = toArabic(rules);
+  }
+  function animateNumber(el, target) {
+    const start = parseInt(el.dataset.v || '0', 10);
+    const dur = 320; const t0 = performance.now();
+    const step = now => {
+      const p = Math.min((now - t0) / dur, 1);
+      const val = Math.round(start + (target - start) * (1 - Math.pow(1 - p, 3)));
+      el.textContent = val.toLocaleString('ar-EG');
+      if (p < 1) requestAnimationFrame(step); else el.dataset.v = target;
+    };
+    requestAnimationFrame(step);
+  }
+
+  /* ====================== الحفظ ====================== */
+  function refreshUI() { generatePrompt(); updateOptionCount(); toggleBlockedWords(); }
+
+  function toggleBlockedWords() { $('blockedWords').disabled = !checked('noRefs'); }
+
+  function saveAndGenerate() {
+    refreshUI();
+    const data = {};
+    document.querySelectorAll('input:not([type="file"]), select, textarea').forEach(el => {
+      if (el.id) data[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+    });
+    localStorage.setItem('promptGeneratorData', JSON.stringify(data));
+  }
+
+  /* ====================== الإجراءات ====================== */
+  function showToast(msg, isErr) {
+    const t = $('toast');
+    t.textContent = msg;
+    t.classList.toggle('err', !!isErr);
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  async function copyPrompt() {
+    const text = $('output').textContent;
+    try {
+      await navigator.clipboard.writeText(text);
+      flashOutput();
+      showToast('✅ تم نسخ البرومبت بنجاح');
+    } catch (e) {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+        showToast('✅ تم نسخ البرومبت');
+      } catch (_) { showToast('⚠️ تعذّر النسخ، حدّده ونسخه يدوياً', true); }
+    }
+  }
+  function flashOutput() {
+    const c = $('outputContainer'); c.classList.add('flash');
+    setTimeout(() => c.classList.remove('flash'), 450);
+  }
+
+  function downloadPrompt() {
+    const safeTitle = ($('docTitle').value.trim() || 'Prompt').replace(/[\\/:*?"<>|]/g, '_');
+    const blob = new Blob([$('output').textContent], { type: 'text/plain;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `برومبت_${safeTitle}.txt`;
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(a.href);
+    showToast('✅ تم تحميل ملف TXT');
+  }
+
+  function exportSettings() {
+    const data = {};
+    document.querySelectorAll('input:not([type="file"]), select, textarea').forEach(el => {
+      if (el.id) data[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+    });
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'إعدادات_مولد_البرومبت.json';
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(a.href);
+    showToast('📤 تم تصدير الإعدادات');
+  }
+
+  function importSettings(event) {
+    const file = event.target.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const data = JSON.parse(e.target.result);
+        Object.keys(data).forEach(key => {
+          const el = $(key);
+          if (el && key !== 'fileUpload') {
+            if (el.type === 'checkbox') el.checked = data[key];
+            else el.value = data[key];
+          }
+        });
+        syncSegFromHidden('depth', 'depthSeg');
+        syncSegFromHidden('format', 'formatSeg');
+        saveAndGenerate();
+        showToast('📥 تم استيراد الإعدادات بنجاح');
+      } catch (_) { showToast('⚠️ ملف الإعدادات غير صالح', true); }
+      event.target.value = "";
+    };
+    reader.onerror = () => showToast('⚠️ تعذّرت قراءة الملف', true);
+    reader.readAsText(file);
+  }
+
+  function resetForm() {
+    if (!confirm('سيتم استعادة جميع الإعدادات الافتراضية (مع الإبقاء على المظهر الحالي). متابعة؟')) return;
+    localStorage.removeItem('promptGeneratorData'); // المظهر لا يُحذف
+    location.reload();
+  }
+
+  /* ====================== ملء الشاشة ====================== */
+  function toggleFullscreen() {
+    $('outputContainer').classList.toggle('full');
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') $('outputContainer').classList.remove('full');
+  });
+</script>
+</body>
+</html>
